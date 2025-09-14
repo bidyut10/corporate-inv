@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { Plus, Trash2, Edit3, Save, X } from "lucide-react";
 import Accordion from "../common/Accordion";
 import Dropdown from "../common/Dropdown";
+import { primaryButtonClass, secondaryButtonClass } from "../data/data";
 
 const BasicInfoEditor = ({
   openSections,
@@ -166,9 +167,9 @@ const BasicInfoEditor = ({
                       {editingField === index ? (
                         <button
                           onClick={handleSaveEdit}
-                          className="p-2 hover:bg-green-100 rounded transition-colors"
+                          className="p-2 hover:bg-orange-100 rounded transition-colors"
                         >
-                          <Save size={16} className="text-green-600" />
+                          <Save size={16} className="text-orange-600" />
                         </button>
                       ) : (
                         <button
@@ -205,12 +206,12 @@ const BasicInfoEditor = ({
             <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
               <div className="bg-white rounded-lg p-6 w-96 max-w-full mx-4">
                 <div className="flex items-center justify-between mb-4">
-                  <h3 className="text-lg font-medium text-neutral-800">
+                  <h3 className="text-md font-medium text-neutral-800">
                     Add Custom Field
                   </h3>
                   <button
                     onClick={() => setShowAddFieldModal(false)}
-                    className="p-2 hover:bg-neutral-100 rounded"
+                    className="p-2 hover:bg-neutral-100 rounded cursor-pointer"
                   >
                     <X size={20} className="text-neutral-600" />
                   </button>
@@ -252,18 +253,18 @@ const BasicInfoEditor = ({
                       disabled={
                         !newField.label.trim() || !newField.value.trim()
                       }
-                      className="flex-1 px-4 py-2 bg-neutral-900 text-white rounded hover:bg-neutral-950 disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
+                      className={primaryButtonClass}
                     >
-                      Add Field
+                      <span className="text-sm font-mono">Add Field</span>
                     </button>
                     <button
                       onClick={() => {
                         setShowAddFieldModal(false);
                         setNewField({ label: "", value: "" });
                       }}
-                      className="flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 rounded hover:bg-neutral-50 transition-colors"
+                      className={secondaryButtonClass}
                     >
-                      Cancel
+                      <span className="text-sm font-mono">Cancel</span>
                     </button>
                   </div>
                 </div>

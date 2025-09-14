@@ -8,6 +8,7 @@ import BasicInfoEditor from "./BasicInfoEditor";
 import CompanyEditor from "./CompanyEditor";
 import ClientEditor from "./ClientEditor";
 import ItemsEditor from "./ItemsEditor";
+import { ArrowDownToLine, Plus, Save } from "lucide-react";
 
 const InvoiceEditor = () => {
   const {
@@ -52,25 +53,11 @@ const InvoiceEditor = () => {
   });
 
   const inputClass =
-    "w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-green-500";
+    "w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500";
   const labelClass = "block text-xs font-medium text-neutral-700 mb-1";
   const buttonClass =
     "flex justify-center items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded hover:bg-neutral-950 cursor-pointer w-full";
   const [editingStates, setEditingStates] = useState({});
-  const [showAddItemModal, setShowAddItemModal] = useState(false);
-  const [showEditItemModal, setShowEditItemModal] = useState(null);
-  const [newItem, setNewItem] = useState({
-    name: "",
-    description: "",
-    qty: 1,
-    price: 0,
-  });
-
-  const [newCustomFields, setNewCustomFields] = useState({
-    basic: { label: "", value: "" },
-    company: { label: "", value: "" },
-    client: { label: "", value: "" },
-  });
 
   const toggleSection = (section) => {
     setOpenSections((prev) => ({
@@ -94,34 +81,9 @@ const InvoiceEditor = () => {
     }
   };
 
-  const handleAddItem = () => {
-    if (newItem.name.trim()) {
-      addItem(newItem);
-      setNewItem({ name: "", description: "", qty: 1, price: 0 });
-      setShowAddItemModal(false);
-    }
-  };
-
-  const handleEditItem = (index, updatedItem) => {
-    Object.keys(updatedItem).forEach((key) => {
-      updateItem(index, key, updatedItem[key]);
-    });
-    setShowEditItemModal(null);
-  };
-
-  const handleAddCustomField = (section) => {
-    if (newCustomFields[section].label.trim()) {
-      addCustomField(section, { ...newCustomFields[section] });
-      setNewCustomFields((prev) => ({
-        ...prev,
-        [section]: { label: "", value: "" },
-      }));
-    }
-  };
-
   const renderCurrencyOption = (country) => (
     <div className="flex items-center gap-2">
-      <span>{country.flag}</span>
+      <span className="bg-neutral-100 px-2 py-1.5 rounded-sm">{country.flag}</span>
       <span>
         {country.code} - {country.currency}
       </span>
@@ -132,9 +94,8 @@ const InvoiceEditor = () => {
     const country = currency.countries.find((c) => c.code === currencyCode);
     return country ? (
       <div className="flex items-center gap-2">
-        <span>{country.flag}</span>
         <span>
-          {country.code} - {country.symbol}
+          {country.name} ( {country.code} {country.symbol} )
         </span>
       </div>
     ) : (
@@ -143,11 +104,17 @@ const InvoiceEditor = () => {
   };
 
   return (
-    <div className="w-full max-h-screen p-6 bg-white overflow-y-auto">
-      <h2 className="text-xl font-medium text-neutral-800 mb-6">
-        Invoice Editor
-      </h2>
-      
+    <div className="w-full max-h-screen p-6 bg-white overflow-y-auto border border-dashed border-neutral-100">
+      <div className="flex justify-end w-full items-center px-4 pb-4 border-b border-dashed border-neutral-100">
+        <button
+          // onClick={() => setShowAddFieldModal(true)}
+          className="flex justify-center items-center gap-2 pl-3 pr-4 py-2 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded hover:shadow-lg hover:shadow-neutral-200/50 cursor-pointer"
+        >
+          <ArrowDownToLine size={14} />
+          <span className="text-sm font-mono">Download</span>
+        </button>
+      </div>
+
       {/* Invoice Information - Always Open */}
       <BasicInfoEditor
         openSections={openSections}
@@ -220,8 +187,6 @@ const InvoiceEditor = () => {
         openSections={openSections}
         toggleEdit={toggleEdit}
         toggleSection={toggleSection}
-        setShowAddItemModal={setShowAddItemModal}
-        setShowEditItemModal={setShowEditItemModal}
         removeItem={removeItem}
         editingStates={editingStates}
         updateTax={updateTax}

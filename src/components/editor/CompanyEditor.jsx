@@ -115,9 +115,9 @@ const CompanyEditor = ({
                     {editingField === index ? (
                       <button
                         onClick={handleSaveEdit}
-                        className="p-2 hover:bg-green-100 rounded transition-colors"
+                        className="p-2 hover:bg-orange-100 rounded transition-colors"
                       >
-                        <Save size={16} className="text-green-600" />
+                        <Save size={16} className="text-orange-600" />
                       </button>
                     ) : (
                       <button
@@ -153,7 +153,7 @@ const CompanyEditor = ({
           isOpen={showAddFieldModal}
           onClose={() => setShowAddFieldModal(false)}
           onAdd={handleAddCustomField}
-          title="Add Company Custom Field"
+          title="Add Custom Field"
           labelClass={labelClass}
           inputClass={inputClass}
         />

@@ -56,59 +56,59 @@ const PdfInvoice = () => {
     "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjUwIiB5PSIyNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNkI3Mjg2Ij5TaWduYXR1cmU8L3RleHQ+Cjwvc3ZnPgo=";
 
   return (
-    <div className="flex w-full min-h-screen bg-white">
-      <div className="w-[17%]">
-      <Sidebar />
+    <div className="flex flex-col justify-center items-center w-full min-h-screen bg-white">
+      <div className="flex justify-between w-full h-full">
+        <div className="w-[17%]">
+          <Sidebar />
+        </div>
+        <div className="w-[40%]">
+          {/* Left Side - Invoice Editor */}
+          <InvoiceEditor />
+        </div>
 
-      </div>
-      <div className="w-[40%]">
+        {/* Right Side - PDF Preview */}
+        <div className="w-[43%] max-h-screen py-6 bg-neutral-50/50 overflow-y-auto text-xs">
+          <div className="bg-white shadow-lg max-w-[595px] mx-auto">
+            <div className="w-[595px] h-[842px] bg-white text-black font-sans text-sm p-6">
+              <div className="pb-3">
+                <h1 className="text-xl font-normal uppercase text-neutral-800">
+                  Invoice {invoice.invoiceNumber}
+                </h1>
+              </div>
 
-      {/* Left Side - Invoice Editor */}
-      <InvoiceEditor />
-      </div>
+              {/* Enhanced Invoice Header with Custom Fields */}
+              <InvoiceHeader
+                logo={logoImage || defaultLogo}
+                invoice={invoice}
+                customFields={invoiceData.customFields.basic}
+              />
 
-      {/* Right Side - PDF Preview */}
-      <div className="w-[43%] max-h-screen py-6 bg-neutral-50/50 overflow-y-auto text-xs">
-        <div className="bg-white shadow-lg max-w-[595px] mx-auto">
-          <div className="w-[595px] h-[842px] bg-white text-black font-sans text-sm p-6">
-            <div className="pb-3">
-              <h1 className="text-xl font-normal uppercase text-neutral-800">
-                Invoice {invoice.invoiceNumber}
-              </h1>
+              <BillingSection
+                sender={details.sender}
+                receiver={details.receiver}
+                customFields={invoiceData.customFields}
+              />
+
+              <ItemsSection product={product} />
+
+              <CalculationSection product={product} />
+
+              <PaymentSection
+                payment={payment}
+                signature={signatureImage || defaultSignature}
+                text={invoiceData.signatureText}
+              />
+
+              <NotesOrTermsSection
+                title={invoiceData.termsSection.title}
+                text={invoiceData.termsSection.text}
+              />
+
+              <ThankyouSection
+                title={invoiceData.thankyouSection.title}
+                text={invoiceData.thankyouSection.text}
+              />
             </div>
-
-            {/* Enhanced Invoice Header with Custom Fields */}
-            <InvoiceHeader
-              logo={logoImage || defaultLogo}
-              invoice={invoice}
-              customFields={invoiceData.customFields.basic}
-            />
-
-            <BillingSection
-              sender={details.sender}
-              receiver={details.receiver}
-              customFields={invoiceData.customFields}
-            />
-
-            <ItemsSection product={product} />
-
-            <CalculationSection product={product} />
-
-            <PaymentSection
-              payment={payment}
-              signature={signatureImage || defaultSignature}
-              text={invoiceData.signatureText}
-            />
-
-            <NotesOrTermsSection
-              title={invoiceData.termsSection.title}
-              text={invoiceData.termsSection.text}
-            />
-
-            <ThankyouSection
-              title={invoiceData.thankyouSection.title}
-              text={invoiceData.thankyouSection.text}
-            />
           </div>
         </div>
       </div>

@@ -165,3 +165,6 @@ export const currency = {
 };
 
 export const themes = [{ name: "Light", value: "light" }];
+
+export const primaryButtonClass = "flex-1 px-4 py-2 bg-gradient-to-r from-orange-400 to-orange-500 text-white rounded hover:shadow-lg hover:shadow-neutral-200/50 cursor-pointer disabled:from-neutral-300 disabled:to-neutral-300 disabled:cursor-not-allowed transition-colors"
+export const secondaryButtonClass = "flex-1 px-4 py-2 bg-neutral-900 text-white rounded cursor-pointer w-full"
