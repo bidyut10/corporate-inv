@@ -1,173 +1,192 @@
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
+// Helper function to preload images
+const preloadImage = (src) => {
+  return new Promise((resolve, reject) => {
+    if (!src || src === '') {
+      resolve('');
+      return;
+    }
+
+    const img = new Image();
+    img.crossOrigin = 'anonymous';
+    img.onload = () => resolve(src);
+    img.onerror = () => resolve(''); // Resolve with empty string on error
+    img.src = src;
+  });
+};
+
 export const generateInvoicePDF = async (invoiceData, logoImage, signatureImage) => {
-    // Create a temporary container for PDF generation with fixed dimensions
-    const tempContainer = document.createElement('div');
-    tempContainer.style.position = 'absolute';
-    tempContainer.style.left = '-9999px';
-    tempContainer.style.top = '-9999px';
-    tempContainer.style.width = '794px'; // A4 width in pixels at 96 DPI
-    tempContainer.style.minHeight = '1123px'; // A4 height in pixels at 96 DPI
-    tempContainer.style.background = 'white';
-    tempContainer.style.fontFamily = 'Arial, sans-serif';
-    tempContainer.style.fontSize = '14px';
-    tempContainer.style.lineHeight = '1.4';
-    tempContainer.style.padding = '40px';
-    tempContainer.style.boxSizing = 'border-box';
+  // Default images with smaller, optimized SVGs
+  const defaultLogo = "data:image/svg+xml,%3Csvg width='80' height='40' viewBox='0 0 80 40' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='80' height='40' fill='%23f3f4f6'/%3E%3Ctext x='40' y='24' text-anchor='middle' font-family='Arial' font-size='10' fill='%236b7280'%3ELOGO%3C/text%3E%3C/svg%3E";
+  const defaultSignature = "data:image/svg+xml,%3Csvg width='80' height='30' viewBox='0 0 80 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='80' height='30' fill='%23f3f4f6'/%3E%3Ctext x='40' y='18' text-anchor='middle' font-family='Arial' font-size='8' fill='%236b7280'%3ESignature%3C/text%3E%3C/svg%3E";
 
-    // Default images - optimized base64
-    const defaultLogo = "data:image/svg+xml,%3Csvg width='100' height='60' viewBox='0 0 100 60' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100' height='60' fill='%23F3F4F6'/%3E%3Ctext x='50' y='35' text-anchor='middle' font-family='Arial' font-size='12' fill='%236B7280'%3ELOGO%3C/text%3E%3C/svg%3E";
-    const defaultSignature = "data:image/svg+xml,%3Csvg width='100' height='30' viewBox='0 0 100 30' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Crect width='100' height='30' fill='%23F3F4F6'/%3E%3Ctext x='50' y='18' text-anchor='middle' font-family='Arial' font-size='10' fill='%236B7280'%3ESignature%3C/text%3E%3C/svg%3E";
+  // Preload images to avoid rendering issues
+  const [loadedLogo, loadedSignature] = await Promise.all([
+    preloadImage(logoImage || defaultLogo),
+    preloadImage(signatureImage || defaultSignature)
+  ]);
 
-    // Calculate totals
-    const subtotal = invoiceData.items.reduce((sum, item) => sum + item.qty * item.price, 0);
-    const tax = invoiceData.tax || 0;
-    const total = subtotal + tax;
+  // Create optimized container
+  const tempContainer = document.createElement('div');
+  tempContainer.style.position = 'absolute';
+  tempContainer.style.left = '-9999px';
+  tempContainer.style.top = '-9999px';
+  tempContainer.style.width = '595px';
+  tempContainer.style.background = 'white';
+  tempContainer.style.fontFamily = 'Arial, sans-serif'; // Use web-safe font
+  tempContainer.style.fontSize = '14px';
+  tempContainer.style.lineHeight = '1.4';
+  tempContainer.style.padding = '24px';
+  tempContainer.style.boxSizing = 'border-box';
+  tempContainer.style.color = 'black';
 
-    // Transform payment data
-    const payment = invoiceData.payment.map((item) => ({
-        [item.label]: item.value,
-    }));
+  // Calculate totals
+  const subtotal = invoiceData.items?.reduce((sum, item) => sum + (item.qty || 0) * (item.price || 0), 0) || 0;
+  const tax = invoiceData.tax || 0;
+  const total = subtotal + tax;
 
-    // Helper function to truncate long text
-    const truncateText = (text, maxLength = 50) => {
-        if (!text) return '';
-        return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
-    };
+  // Transform payment data
+  const payment = invoiceData.payment?.map((item) => ({
+    [item.label]: item.value,
+  })) || [];
 
-    // Generate optimized HTML content
-    tempContainer.innerHTML = `
-    <div style="width: 100%; height: 100%; background: white; color: black; font-family: Arial, sans-serif; font-size: 14px;">
-      <!-- Invoice Header -->
-      <div style="padding-bottom: 16px; border-bottom: 1px solid #e5e5e5;">
-        <h1 style="font-size: 28px; font-weight: 600; text-transform: uppercase; color: #1f2937; margin: 0; padding: 0;">
-          Invoice ${invoiceData.invoiceNumber || 'N/A'}
+  // Generate optimized HTML content
+  tempContainer.innerHTML = `
+    <div style="width: 547px; display: flex; flex-direction: column; justify-content: space-between; align-items: center; margin: auto; background: white; color: black; font-family: Arial, sans-serif; font-size: 14px; top: 0;">
+      
+      <!-- Invoice Title -->
+      <div style="width: 100%; text-align: start;">
+        <h1 style="font-size: 20px; font-weight: normal; text-transform: uppercase;">
+            Invoice ${invoiceData.invoiceNumber || ''}
         </h1>
       </div>
 
-      <!-- Invoice Info and Logo Section -->
-      <div style="display: table; width: 100%; margin: 20px 0; border: 1px solid #e5e5e5;">
-        <div style="display: table-row;">
-          <div style="display: table-cell; width: 50%; padding: 16px; border-right: 1px solid #e5e5e5; vertical-align: top;">
-            <div style="font-size: 13px; line-height: 1.6;">
-              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                <strong>Serial Number:</strong>
-                <span>${invoiceData.serialNumber || 'N/A'}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                <strong>Date of Issue:</strong>
-                <span>${invoiceData.issueDate || 'N/A'}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                <strong>Due Date:</strong>
-                <span>${invoiceData.dueDate || 'N/A'}</span>
-              </div>
-              <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                <strong>Currency:</strong>
-                <span>${invoiceData.currency || 'USD'}</span>
-              </div>
-              ${invoiceData.customFields?.basic?.map(field => `
-                <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                  <strong>${field.label}:</strong>
-                  <span>${truncateText(field.value, 20)}</span>
-                </div>
-              `).join('') || ''}
+      <!-- Invoice Header Section -->
+      <div style="width: 100%; display: flex; justify-content: space-between; align-items: center; border-top: 1px dashed #d1d5db; border-bottom: 1px dashed #d1d5db;">
+        
+        <div style="width: 50%; height: 100% display: flex; flex-direction: column; justify-content: start; align-items: center; padding-left:16px;">
+          <div style="font-size: 12px;">
+            <div style="display: flex; justify-content: space-between; margin: 2px 0;">
+              <span style="color: black;">Serial Number</span>
+              <span style="color: black;">${invoiceData.serialNumber || ''}</span>
             </div>
+            <div style="display: flex; justify-content: space-between; margin: 2px 0;">
+              <span style="color: black;">Date of Issue</span>
+              <span style="color: black;">${invoiceData.issueDate || ''}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin: 2px 0;">
+              <span style="color: black;">Due Date</span>
+              <span style="color: black;">${invoiceData.dueDate || ''}</span>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin: 2px 0;">
+              <span style="color: black;">Currency</span>
+              <span style="color: black;">${invoiceData.currency || ''}</span>
+            </div>
+            ${invoiceData.customFields?.basic?.map(field => `
+              <div style="display: flex; justify-content: space-between; margin: 2px 0;">
+                <span style="color: black;">${field.label}</span>
+                <span style="color: black;">${field.value}</span>
+              </div>
+            `).join('') || ''}
           </div>
-          <div style="display: table-cell; width: 50%; padding: 16px; text-align: center; vertical-align: middle;">
-            <img style="max-width: 120px; max-height: 80px; object-fit: contain;" src="${logoImage || defaultLogo}" alt="Logo" />
-          </div>
+        </div>
+        <div style="width: 50%; height: 100% display: flex; justify-content: end; align-items: center; padding-left:16px;">
+          ${loadedLogo ? `<img style="max-height: 60px; max-width: 120px; object-fit: contain;" src="${loadedLogo}" alt="logo" />` : ''}
         </div>
       </div>
 
       <!-- Billing Section -->
-      <div style="display: table; width: 100%; margin: 20px 0; border: 1px solid #e5e5e5;">
-        <div style="display: table-row;">
-          <div style="display: table-cell; width: 50%; padding: 16px; border-right: 1px solid #e5e5e5; vertical-align: top;">
-            <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #1f2937; font-weight: 600;">From</h3>
-            <div style="font-size: 13px; color: #4b5563; line-height: 1.6;">
-              <div style="font-weight: 600; margin-bottom: 4px;">${invoiceData.billedBy?.name || 'N/A'}</div>
-              <div style="margin-bottom: 4px;">${invoiceData.billedBy?.contact || ''}</div>
-              <div style="margin-bottom: 8px;">${truncateText(invoiceData.billedBy?.address, 40) || ''}</div>
-              ${invoiceData.customFields?.company?.map(field => `
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
-                  <strong>${field.label}:</strong>
-                  <span>${truncateText(field.value, 15)}</span>
-                </div>
-              `).join('') || ''}
-            </div>
+      <div style="position: relative; display: flex; width: 100%; border-bottom: 1px dashed #d1d5db; margin-bottom: 16px;">
+        <div style="position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: repeating-linear-gradient(to bottom, #d1d5db 0px, #d1d5db 4px, transparent 4px, transparent 8px);"></div>
+        
+        <div style="flex: 1; padding: 12px 12px 12px 0;">
+          <h3 style="margin: 0 0 6px 0; font-size: 12px; font-weight: 500; color: black;">From</h3>
+          <div style="font-size: 12px; color: black; line-height: 1.5;">
+            <div style="margin-bottom: 4px;">${invoiceData.billedBy?.name || ''}</div>
+            <div style="margin-bottom: 4px;">${invoiceData.billedBy?.contact || ''}</div>
+            <div>${invoiceData.billedBy?.address || ''}</div>
+            ${invoiceData.customFields?.company?.length > 0 ? `
+              <div>
+                ${invoiceData.customFields.company.map(field => `
+                  <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                    <span style="font-weight: 500; color: black;">${field.label}</span>
+                    <span style="color: black;">${field.value}</span>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
           </div>
-          <div style="display: table-cell; width: 50%; padding: 16px; vertical-align: top;">
-            <h3 style="margin: 0 0 12px 0; font-size: 14px; color: #1f2937; font-weight: 600;">To</h3>
-            <div style="font-size: 13px; color: #4b5563; line-height: 1.6;">
-              <div style="font-weight: 600; margin-bottom: 4px;">${invoiceData.billedTo?.name || 'N/A'}</div>
-              <div style="margin-bottom: 4px;">${invoiceData.billedTo?.contact || ''}</div>
-              <div style="margin-bottom: 8px;">${truncateText(invoiceData.billedTo?.address, 40) || ''}</div>
-              ${invoiceData.customFields?.client?.map(field => `
-                <div style="display: flex; justify-content: space-between; margin-bottom: 4px; font-size: 12px;">
-                  <strong>${field.label}:</strong>
-                  <span>${truncateText(field.value, 15)}</span>
-                </div>
-              `).join('') || ''}
-            </div>
+        </div>
+        <div style="flex: 1; padding: 12px 0 12px 12px;">
+          <h3 style="margin: 0 0 6px 0; font-size: 12px; font-weight: 500; color: black;">To</h3>
+          <div style="font-size: 12px; color: black; line-height: 1.5;">
+            <div style="margin-bottom: 4px;">${invoiceData.billedTo?.name || ''}</div>
+            <div style="margin-bottom: 4px;">${invoiceData.billedTo?.contact || ''}</div>
+            <div>${invoiceData.billedTo?.address || ''}</div>
+            ${invoiceData.customFields?.client?.length > 0 ? `
+              <div>
+                ${invoiceData.customFields.client.map(field => `
+                  <div style="display: flex; justify-content: space-between; margin-top: 4px;">
+                    <span style="font-weight: 500; color: black;">${field.label}</span>
+                    <span style="color: black;">${field.value}</span>
+                  </div>
+                `).join('')}
+              </div>
+            ` : ''}
           </div>
         </div>
       </div>
 
-      <!-- Items Section - Fixed Table Layout -->
-      <div style="margin: 20px 0;">
-        <table style="width: 100%; border-collapse: collapse; font-size: 13px; table-layout: fixed;">
-          <thead>
-            <tr style="background-color: #f9fafb; border: 1px solid #e5e5e5;">
-              <th style="width: 8%; padding: 12px 8px; text-align: left; font-weight: 600; border-right: 1px solid #e5e5e5;">No.</th>
-              <th style="width: 40%; padding: 12px 8px; text-align: left; font-weight: 600; border-right: 1px solid #e5e5e5;">Item</th>
-              <th style="width: 12%; padding: 12px 8px; text-align: center; font-weight: 600; border-right: 1px solid #e5e5e5;">Qty</th>
-              <th style="width: 20%; padding: 12px 8px; text-align: right; font-weight: 600; border-right: 1px solid #e5e5e5;">Price</th>
-              <th style="width: 20%; padding: 12px 8px; text-align: right; font-weight: 600;">Total</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${invoiceData.items?.map((item, index) => `
-              <tr style="border-bottom: 1px solid #e5e5e5;">
-                <td style="padding: 12px 8px; text-align: left; border-right: 1px solid #e5e5e5; vertical-align: top;">
-                  ${index + 1}.
-                </td>
-                <td style="padding: 12px 8px; border-right: 1px solid #e5e5e5; vertical-align: top; word-wrap: break-word;">
-                  <div style="font-weight: 600; margin-bottom: 4px; color: #1f2937;">
-                    ${truncateText(item.name, 35)}
-                  </div>
-                  <div style="color: #6b7280; font-size: 12px; line-height: 1.4;">
-                    ${truncateText(item.description, 45)}
-                  </div>
-                </td>
-                <td style="padding: 12px 8px; text-align: center; border-right: 1px solid #e5e5e5; vertical-align: top;">
-                  ${item.qty || 0}
-                </td>
-                <td style="padding: 12px 8px; text-align: right; border-right: 1px solid #e5e5e5; vertical-align: top;">
-                  ${invoiceData.symbol || '$'} ${(item.price || 0).toFixed(2)}
-                </td>
-                <td style="padding: 12px 8px; text-align: right; vertical-align: top;">
-                  ${invoiceData.symbol || '$'} ${((item.qty || 0) * (item.price || 0)).toFixed(2)}
-                </td>
-              </tr>
-            `).join('') || '<tr><td colspan="5" style="padding: 20px; text-align: center; color: #6b7280;">No items found</td></tr>'}
-          </tbody>
-        </table>
+      <!-- Items Section -->
+      <div style="margin-bottom: 16px;">
+        <div style="display: flex; width: 100%; background-color: #f9fafb; font-size: 12px; font-weight: 500;">
+          <div style="flex: 0 0 8%; padding: 8px 4px; text-align: left; color: black;">No.</div>
+          <div style="flex: 1; padding: 8px; color: black;">Item</div>
+          <div style="flex: 0 0 8%; padding: 8px; text-align: center; color: black;">Quantity</div>
+          <div style="flex: 0 0 17%; padding: 8px; text-align: right; color: black;">Price</div>
+          <div style="flex: 0 0 17%; padding: 8px; text-align: right; color: black;">Total</div>
+        </div>
+        
+        ${invoiceData.items?.map((item, index) => `
+          <div style="display: flex; width: 100%; border-bottom: 1px dashed #e5e7eb;">
+            <div style="flex: 0 0 8%; padding: 8px 4px; font-size: 10px; color: black; align-self: flex-start;">
+              ${index + 1}.
+            </div>
+            <div style="flex: 1; padding: 8px;">
+              <div style="font-weight: 500; font-size: 12px; color: black; margin-bottom: 4px;">
+                ${item.name || ''}
+              </div>
+              <div style="font-size: 12px; color: black; line-height: 1.3;">
+                ${item.description || ''}
+              </div>
+            </div>
+            <div style="flex: 0 0 8%; padding: 8px; text-align: center; font-size: 12px; color: black; align-self: flex-start;">
+              ${item.qty || 0}
+            </div>
+            <div style="flex: 0 0 17%; padding: 8px; text-align: right; font-size: 12px; color: black; align-self: flex-start;">
+              ${invoiceData.symbol || '$'} ${(item.price || 0).toFixed(2)}
+            </div>
+            <div style="flex: 0 0 17%; padding: 8px; text-align: right; font-size: 12px; color: black; align-self: flex-start;">
+              ${invoiceData.symbol || '$'} ${((item.qty || 0) * (item.price || 0)).toFixed(2)}
+            </div>
+          </div>
+        `).join('') || ''}
       </div>
 
       <!-- Calculation Section -->
-      <div style="margin: 20px 0; display: flex; justify-content: flex-end;">
-        <div style="width: 300px; border: 1px solid #e5e5e5;">
-          <div style="display: flex; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid #e5e5e5; background-color: #f9fafb;">
-            <span style="font-size: 13px;">Tax:</span>
-            <span style="font-size: 13px; font-weight: 600;">
+      <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+        <div style="width: 40%;">
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e5e7eb;">
+            <span style="font-size: 12px; color: black;">Tax</span>
+            <span style="font-size: 12px; padding-right: 8px; color: black;">
               ${invoiceData.symbol || '$'} ${tax.toFixed(2)}
             </span>
           </div>
-          <div style="display: flex; justify-content: space-between; padding: 12px 16px; background-color: #1f2937; color: white;">
-            <span style="font-size: 14px; font-weight: 600;">Total:</span>
-            <span style="font-size: 14px; font-weight: 600;">
+          <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px dashed #e5e7eb;">
+            <span style="font-size: 14px; font-weight: 500; color: black;">Total</span>
+            <span style="font-size: 14px; font-weight: 500; padding-right: 8px; color: black;">
               ${invoiceData.symbol || '$'} ${total.toFixed(2)}
             </span>
           </div>
@@ -175,121 +194,125 @@ export const generateInvoicePDF = async (invoiceData, logoImage, signatureImage)
       </div>
 
       <!-- Payment Section -->
-      <div style="display: table; width: 100%; margin: 20px 0; border: 1px solid #e5e5e5;">
-        <div style="display: table-row;">
-          <div style="display: table-cell; width: 50%; padding: 16px; border-right: 1px solid #e5e5e5; vertical-align: top;">
-            <h3 style="font-size: 14px; color: #1f2937; font-weight: 600; margin: 0 0 12px 0;">
-              Payment Information
-            </h3>
-            <div style="font-size: 13px; color: #4b5563;">
-              ${payment?.map(item => {
-        const [field, value] = Object.entries(item)[0];
-        return `
-                  <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                    <span>${field}:</span>
-                    <span style="font-weight: 500;">${truncateText(value, 20)}</span>
-                  </div>
-                `;
-    }).join('') || '<div style="color: #9ca3af;">No payment information</div>'}
-            </div>
+      <div style="position: relative; display: flex; width: 100%; border-top: 1px dashed #d1d5db; border-bottom: 1px dashed #d1d5db; margin-bottom: 16px;">
+        <div style="position: absolute; top: 0; bottom: 0; left: 50%; width: 1px; background: repeating-linear-gradient(to bottom, #d1d5db 0px, #d1d5db 4px, transparent 4px, transparent 8px);"></div>
+        
+        <div style="flex: 1; padding: 12px 16px 12px 0;">
+          <h3 style="font-size: 12px; color: black; font-weight: 500; margin: 0 0 12px 0;">
+            Payment Information
+          </h3>
+          ${payment.map(item => {
+    const [field, value] = Object.entries(item)[0];
+    return `
+              <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                <span style="font-size: 12px; color: black;">${field}</span>
+                <span style="font-size: 12px; color: black;">${value}</span>
+              </div>
+            `;
+  }).join('')}
+        </div>
+        <div style="flex: 1; padding: 12px 0 12px 16px; text-align: center; display: flex; flex-direction: column; align-items: center; justify-content: center;">
+          <div style="margin-bottom: 8px;">
+            ${loadedSignature ? `<img src="${loadedSignature}" alt="signature" style="max-height: 40px; max-width: 100px; object-fit: contain;" />` : ''}
           </div>
-          <div style="display: table-cell; width: 50%; padding: 16px; text-align: center; vertical-align: middle;">
-            <div style="margin-bottom: 12px;">
-              <img src="${signatureImage || defaultSignature}" alt="Signature" style="max-width: 120px; max-height: 60px; object-fit: contain;" />
-            </div>
-            <div style="font-size: 11px; color: #6b7280; background-color: #f9fafb; padding: 8px; border-radius: 4px;">
-              ${invoiceData.signatureText || 'Authorized Signature'}
-            </div>
+          <div style="font-size: 10px; color: black; background-color: #f9fafb; padding: 4px 8px;">
+            ${invoiceData.signatureText || ''}
           </div>
         </div>
       </div>
 
       <!-- Terms Section -->
       ${invoiceData.termsSection?.title || invoiceData.termsSection?.text ? `
-        <div style="margin: 20px 0; padding: 16px; background-color: #f9fafb; border: 1px solid #e5e5e5;">
-          <h3 style="color: #1f2937; font-weight: 600; font-size: 14px; margin: 0 0 8px 0;">${invoiceData.termsSection.title || 'Terms & Conditions'}</h3>
-          <div style="color: #4b5563; font-size: 13px; line-height: 1.6;">${invoiceData.termsSection.text || ''}</div>
+        <div style="width: 100%; border-top: 1px dashed #d1d5db; border-bottom: 1px dashed #d1d5db; 
+                    background-color: #f9fafb; padding: 12px; margin-bottom: 16px;">
+          <h3 style="color: black; font-weight: 500; font-size: 12px; margin: 0 0 4px 0;">
+            ${invoiceData.termsSection.title || ''}
+          </h3>
+          <div style="color: black; font-size: 12px; margin: 0; line-height: 1.4;">
+            ${invoiceData.termsSection.text || ''}
+          </div>
         </div>
       ` : ''}
 
       <!-- Thank You Section -->
       ${invoiceData.thankyouSection?.title || invoiceData.thankyouSection?.text ? `
-        <div style="margin: 20px 0 0 0; padding: 16px; background-color: #f9fafb; border: 1px solid #e5e5e5; text-align: center;">
-          <h3 style="color: #1f2937; font-weight: 600; font-size: 14px; margin: 0 0 8px 0;">
-            ${invoiceData.thankyouSection.title || 'Thank You'}
+        <div style="width: 100%; border-top: 1px dashed #d1d5db; border-bottom: 1px dashed #d1d5db; 
+                    background-color: #f9fafb; padding: 12px; text-align: center;">
+          <h3 style="color: black; font-weight: 500; font-size: 12px; margin: 0 0 4px 0;">
+            ${invoiceData.thankyouSection.title || ''}
           </h3>
-          <div style="color: #4b5563; font-size: 13px;">${invoiceData.thankyouSection.text || ''}</div>
+          <div style="color: black; font-size: 12px; margin: 0;">
+            ${invoiceData.thankyouSection.text || ''}
+          </div>
         </div>
       ` : ''}
+
     </div>
   `;
 
-    document.body.appendChild(tempContainer);
+  document.body.appendChild(tempContainer);
 
-    try {
-        // Optimized canvas generation with lower scale for smaller file size
-        const canvas = await html2canvas(tempContainer, {
-            scale: 1.5, // Reduced from 2 to 1.5 for smaller file size
-            useCORS: true,
-            allowTaint: true,
-            backgroundColor: '#ffffff',
-            width: 794,
-            height: tempContainer.scrollHeight,
-            scrollX: 0,
-            scrollY: 0,
-            windowWidth: 794,
-            windowHeight: tempContainer.scrollHeight,
-            logging: false, // Disable logging for production
-            removeContainer: true
-        });
+  try {
+    // Wait a bit for images to load
+    await new Promise(resolve => setTimeout(resolve, 100));
 
-        // Create PDF with compression
-        const pdf = new jsPDF({
-            orientation: 'portrait',
-            unit: 'mm',
-            format: 'a4',
-            compress: true // Enable compression
-        });
+    // Optimized canvas generation
+    const canvas = await html2canvas(tempContainer, {
+      scale: 1.5, // Balanced scale for quality vs file size
+      useCORS: true,
+      allowTaint: false,
+      backgroundColor: '#ffffff',
+      width: 595,
+      height: tempContainer.scrollHeight,
+      scrollX: 0,
+      scrollY: 0,
+      logging: false,
+      removeContainer: false,
+      foreignObjectRendering: false, // Disable for better compatibility
+      imageTimeout: 0
+    });
 
-        // Convert canvas to optimized image
-        const imgData = canvas.toDataURL('image/jpeg', 0.85); // Use JPEG with 85% quality instead of PNG
+    // Create PDF with moderate compression
+    const pdf = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4',
+      compress: true
+    });
 
-        const pdfWidth = pdf.internal.pageSize.getWidth();
-        const pdfHeight = pdf.internal.pageSize.getHeight();
-        const canvasAspectRatio = canvas.height / canvas.width;
-        const pdfAspectRatio = pdfHeight / pdfWidth;
+    // Convert to optimized JPEG with good quality
+    const imgData = canvas.toDataURL('image/jpeg', 0.92);
 
-        let renderWidth, renderHeight;
+    const pdfWidth = pdf.internal.pageSize.getWidth();
+    const pdfHeight = pdf.internal.pageSize.getHeight();
+    const canvasAspectRatio = canvas.height / canvas.width;
 
-        if (canvasAspectRatio > pdfAspectRatio) {
-            renderHeight = pdfHeight - 20; // 10mm margin top and bottom
-            renderWidth = renderHeight / canvasAspectRatio;
-        } else {
-            renderWidth = pdfWidth - 20; // 10mm margin left and right
-            renderHeight = renderWidth * canvasAspectRatio;
-        }
+    let renderWidth = pdfWidth - 10;
+    let renderHeight = renderWidth * canvasAspectRatio;
 
-        const xOffset = (pdfWidth - renderWidth) / 2;
-        const yOffset = 10; // 10mm top margin
-
-        pdf.addImage(imgData, 'JPEG', xOffset, yOffset, renderWidth, renderHeight);
-
-        // Save PDF with optimized filename
-        const fileName = `Invoice-${(invoiceData.invoiceNumber || 'Invoice').replace(/[^a-zA-Z0-9]/g, '-')}-${new Date().toISOString().split('T')[0]}.pdf`;
-        pdf.save(fileName);
-
-        return true;
-
-    } catch (error) {
-        console.error('Error generating PDF:', error);
-        throw new Error(`PDF generation failed: ${error.message}`);
-    } finally {
-        // Clean up
-        if (document.body.contains(tempContainer)) {
-            document.body.removeChild(tempContainer);
-        }
+    if (renderHeight > pdfHeight - 10) {
+      renderHeight = pdfHeight - 10;
+      renderWidth = renderHeight / canvasAspectRatio;
     }
+
+    const xOffset = (pdfWidth - renderWidth) / 2;
+    const yOffset = 5;
+
+    pdf.addImage(imgData, 'JPEG', xOffset, yOffset, renderWidth, renderHeight);
+
+    const fileName = `Invoice-${(invoiceData.invoiceNumber || 'INV').replace(/[^a-zA-Z0-9]/g, '-')}.pdf`;
+    pdf.save(fileName);
+
+    return true;
+
+  } catch (error) {
+    console.error('Error generating PDF:', error);
+    throw new Error(`PDF generation failed: ${error.message}`);
+  } finally {
+    if (document.body.contains(tempContainer)) {
+      document.body.removeChild(tempContainer);
+    }
+  }
 };
 
-// Production-ready export
 export default generateInvoicePDF;

@@ -16,7 +16,8 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
-import generateInvoicePDF from "../utils/generateInvoicePDF";
+// import generateInvoicePDF from "../utils/generateInvoicePDF";
+import { downloadInvoicePDF } from "../utils/index";
 
 const InvoiceEditor = () => {
   const {
@@ -131,62 +132,62 @@ const InvoiceEditor = () => {
   }, [invoiceData]);
 
   // Enhanced PDF Download Handler with validation and better error handling
-  const handleDownloadPDF = useCallback(async () => {
-    if (downloadState.isLoading) return;
+  // const handleDownloadPDF = useCallback(async () => {
+  //   if (downloadState.isLoading) return;
 
-    // Reset states
-    setDownloadState({
-      isLoading: false,
-      success: false,
-      error: null,
-    });
+  //   // Reset states
+  //   setDownloadState({
+  //     isLoading: false,
+  //     success: false,
+  //     error: null,
+  //   });
 
-    // Validate data
-    const validationErrors = validateInvoiceData();
-    if (validationErrors.length > 0) {
-      setDownloadState({
-        isLoading: false,
-        success: false,
-        error: `Please fix the following issues:\n• ${validationErrors.join(
-          "\n• "
-        )}`,
-      });
-      return;
-    }
+  //   // Validate data
+  //   const validationErrors = validateInvoiceData();
+  //   if (validationErrors.length > 0) {
+  //     setDownloadState({
+  //       isLoading: false,
+  //       success: false,
+  //       error: `Please fix the following issues:\n• ${validationErrors.join(
+  //         "\n• "
+  //       )}`,
+  //     });
+  //     return;
+  //   }
 
-    setDownloadState((prev) => ({ ...prev, isLoading: true }));
+  //   setDownloadState((prev) => ({ ...prev, isLoading: true }));
 
-    try {
-      // Add small delay to show loading state
-      await new Promise((resolve) => setTimeout(resolve, 500));
+  //   try {
+  //     // Add small delay to show loading state
+  //     await new Promise((resolve) => setTimeout(resolve, 500));
 
-      await generateInvoicePDF(invoiceData, logoImage, signatureImage);
+  //     await generateInvoicePDF(invoiceData, logoImage, signatureImage);
 
-      setDownloadState({
-        isLoading: false,
-        success: true,
-        error: null,
-      });
+  //     setDownloadState({
+  //       isLoading: false,
+  //       success: true,
+  //       error: null,
+  //     });
 
-      // Reset success state after 3 seconds
-      setTimeout(() => {
-        setDownloadState((prev) => ({ ...prev, success: false }));
-      }, 3000);
-    } catch (error) {
-      console.error("PDF download failed:", error);
-      setDownloadState({
-        isLoading: false,
-        success: false,
-        error: error.message || "Failed to generate PDF. Please try again.",
-      });
-    }
-  }, [
-    invoiceData,
-    logoImage,
-    signatureImage,
-    downloadState.isLoading,
-    validateInvoiceData,
-  ]);
+  //     // Reset success state after 3 seconds
+  //     setTimeout(() => {
+  //       setDownloadState((prev) => ({ ...prev, success: false }));
+  //     }, 3000);
+  //   } catch (error) {
+  //     console.error("PDF download failed:", error);
+  //     setDownloadState({
+  //       isLoading: false,
+  //       success: false,
+  //       error: error.message || "Failed to generate PDF. Please try again.",
+  //     });
+  //   }
+  // }, [
+  //   invoiceData,
+  //   logoImage,
+  //   signatureImage,
+  //   downloadState.isLoading,
+  //   validateInvoiceData,
+  // ]);
 
   const renderCurrencyOption = (country) => (
     <div className="flex items-center gap-2">
@@ -211,7 +212,21 @@ const InvoiceEditor = () => {
       currencyCode
     );
   };
+  // Replace the handleDownloadPDF function in your InvoiceEditor.jsx with this:
 
+  const handleDownloadPDF = async () => {
+    try {
+      // Pass all required parameters including images
+      await downloadInvoicePDF(
+        invoiceData,
+        "invoice",
+        logoImage,
+        signatureImage
+      );
+    } catch (error) {
+      console.error("Failed to generate PDF:", error);
+    }
+  };
   return (
     <div className="w-full max-h-screen p-6 bg-white overflow-y-auto border border-dashed border-neutral-100">
       <div className="flex justify-end w-full items-center px-4 pb-4 border-b border-dashed border-neutral-100">
