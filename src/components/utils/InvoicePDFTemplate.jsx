@@ -39,7 +39,8 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderStyle: "dashed",
     borderColor: "#f5f5f5",
-    paddingVertical: 12,
+    paddingTop: 12,
+    paddingBottom: 4,
     position: "relative",
   },
 
@@ -56,37 +57,37 @@ const styles = StyleSheet.create({
 
   headerLeft: {
     width: "48%",
-    paddingRight: 16,
-    fontSize: 12,
+    paddingRight: 6,
+    fontSize: 11,
   },
 
   headerRight: {
     width: "48%",
     alignItems: "flex-end",
     justifyContent: "center",
-    paddingLeft: 16,
+    paddingLeft: 6,
   },
 
   headerRow: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 2,
+    marginVertical: 1,
   },
 
   headerLabel: {
     color: "#000000",
-    fontSize: 12,
+    fontSize: 11,
   },
 
   headerValue: {
     color: "#404040",
-    fontSize: 12,
+    fontSize: 11,
     marginLeft: 8,
   },
 
   logo: {
     maxHeight: 60,
-    maxWidth: 120,
+    // maxWidth: 120,
     objectFit: "contain",
   },
 
@@ -98,7 +99,8 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
     borderColor: "#f5f5f5",
     marginBottom: 16,
-    paddingVertical: 12,
+    paddingTop: 12,
+    paddingBottom: 4,
     position: "relative",
   },
 
@@ -115,18 +117,18 @@ const styles = StyleSheet.create({
 
   billingColumn: {
     width: "48%",
-    paddingHorizontal: 12,
+    // paddingHorizontal: 12,
   },
 
   billingHeader: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: 500,
     color: "#262626",
-    marginBottom: 8,
+    marginBottom: 4,
   },
 
   billingText: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#525252",
     lineHeight: 1.5,
     marginBottom: 4,
@@ -143,17 +145,17 @@ const styles = StyleSheet.create({
   customField: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginVertical: 2,
+    marginVertical: 1,
   },
 
   customFieldLabel: {
-    fontSize: 12,
+    fontSize: 11,
     fontWeight: 500,
     color: "#404040",
   },
 
   customFieldValue: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#404040",
     marginLeft: 8,
   },
@@ -168,10 +170,11 @@ const styles = StyleSheet.create({
     backgroundColor: "#fafafa",
     fontSize: 11,
     fontWeight: 500,
-    paddingVertical: 8,
+    paddingTop: 6,
     paddingHorizontal: 8,
     color: "#262626",
     marginBottom: 2,
+    borderRadius: 4,
   },
 
   itemsHeaderNo: {
@@ -180,7 +183,7 @@ const styles = StyleSheet.create({
   },
 
   itemsHeaderItem: {
-    width: "50%",
+    width: "40%",
     // paddingHorizontal: 4,
   },
 
@@ -190,12 +193,12 @@ const styles = StyleSheet.create({
   },
 
   itemsHeaderPrice: {
-    width: "17%",
+    width: "22%",
     textAlign: "right",
   },
 
   itemsHeaderTotal: {
-    width: "17%",
+    width: "22%",
     textAlign: "right",
   },
 
@@ -218,7 +221,7 @@ const styles = StyleSheet.create({
   },
 
   itemDetails: {
-    width: "50%",
+    width: "40%",
     paddingHorizontal: 2,
   },
 
@@ -226,7 +229,7 @@ const styles = StyleSheet.create({
     fontSize: 11,
     fontWeight: 500,
     color: "#525252",
-    marginBottom: 4,
+    marginBottom: 2,
   },
 
   itemDescription: {
@@ -244,7 +247,7 @@ const styles = StyleSheet.create({
   },
 
   itemPrice: {
-    width: "17%",
+    width: "22%",
     fontSize: 10,
     color: "#525252",
     textAlign: "right",
@@ -252,7 +255,7 @@ const styles = StyleSheet.create({
   },
 
   itemTotal: {
-    width: "17%",
+    width: "22%",
     fontSize: 10,
     color: "#525252",
     textAlign: "right",
@@ -265,7 +268,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-end",
     alignItems: "center",
     width: "100%",
-    marginBottom: 16,
+    marginBottom: 12,
     // marginTop: 8,
   },
 
@@ -277,19 +280,19 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    paddingVertical: 8,
+    paddingVertical: 4,
     borderBottomWidth: 1,
     borderStyle: "dashed",
     borderColor: "#fafafa",
   },
 
   calculationLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#404040",
   },
 
   calculationValue: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#404040",
     paddingRight: 8,
   },
@@ -328,9 +331,9 @@ const styles = StyleSheet.create({
     borderStyle: "dashed",
     borderColor: "#f5f5f5",
     marginBottom: 16,
-    marginTop: 8,
+    marginTop: 4,
     position: "relative",
-    minHeight: 120,
+    // minHeight: 120,
   },
 
   // Add vertical divider for payment section
@@ -346,13 +349,15 @@ const styles = StyleSheet.create({
 
   paymentLeft: {
     width: "48%",
-    paddingVertical: 12,
-    paddingRight: 12,
+    paddingTop: 12,
+    paddingBottom: 4,
+    paddingRight: 6,
   },
 
   paymentRight: {
     width: "48%",
-    paddingVertical: 12,
+    paddingTop: 12,
+    paddingBottom: 4,
     paddingLeft: 12,
     alignItems: "center",
     justifyContent: "center",
@@ -360,27 +365,27 @@ const styles = StyleSheet.create({
   },
 
   paymentTitle: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#262626",
     fontWeight: 500,
-    marginBottom: 12,
+    marginBottom: 6,
   },
 
   paymentRow: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 4,
-    paddingVertical: 2,
+    // marginBottom: 4,
+    paddingVertical: 1,
   },
 
   paymentLabel: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#525252",
   },
 
   paymentValue: {
-    fontSize: 12,
+    fontSize: 11,
     color: "#525252",
   },
 
@@ -427,20 +432,20 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 12,
     marginBottom: 16,
-    marginTop: 8,
+    // marginTop: 8,
   },
 
   notesTitle: {
     color: "#262626",
     fontWeight: 500,
-    fontSize: 12,
-    marginBottom: 4,
+    fontSize: 11,
+    marginBottom: 2,
   },
 
   notesText: {
     color: "#525252",
-    fontSize: 12,
-    lineHeight: 1.4,
+    fontSize: 10,
+    lineHeight: 1,
   },
 
   // Thank You Section - matches w-full border-y bg-neutral-50/50 border-dashed border-neutral-100 text-center
@@ -454,20 +459,20 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
     paddingHorizontal: 12,
     textAlign: "center",
-    marginTop: 8,
+    // marginTop: 8,
   },
 
   thankYouTitle: {
     color: "#262626",
     fontWeight: 500,
-    fontSize: 12,
-    marginBottom: 4,
+    fontSize: 11,
+    marginBottom: 2,
     textAlign: "center",
   },
 
   thankYouText: {
     color: "#525252",
-    fontSize: 12,
+    fontSize: 10,
     textAlign: "center",
   },
 });
