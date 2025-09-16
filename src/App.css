@@ -31,8 +31,16 @@ body {
   scrollbar-width: none;
 }
 
-br{
-  align-items: center;
-  padding-right: 8px; padding-top: 8px; padding-bottom: 8px;
-  justify-content: start;
+@keyframes slide-in {
+  from {
+    transform: translateX(-100%);
+  }
+
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-slide-in {
+  animation: slide-in 0.3s ease-out;
 }

@@ -2,7 +2,7 @@ const Logo = () => {
   return (
     <div className="flex justify-center items-center gap-3">
       {/* Fixed: Reduced padding from p-3 to p-2, adjusted SVG size and viewBox */}
-      <div className="bg-gradient-to-br from-orange-400 to-orange-500 w-9 h-9 rounded-lg border-2 border-orange-400 shadow-lg relative  flex justify-center items-center overflow-hidden">
+      <div className="bg-gradient-to-br from-orange-400 to-orange-500 w-8 h-8 rounded-lg border-2 border-orange-400 relative  flex justify-center items-center overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
         <div className="relative">
           {/* Centered document icon only */}
@@ -88,8 +88,8 @@ const Logo = () => {
       </div>
 
       <div className="ml-1">
-        <h1 className="text-md font-bold text-neutral-900">Corporate AI</h1>
-        <p className="text-[10px] text-neutral-600 mt-1">
+        <h1 className="text-md font-bold text-neutral-900">Freeinvo</h1>
+        <p className="text-[10px] text-neutral-600 mt-">
           Invoice Creation Tool
         </p>
       </div>

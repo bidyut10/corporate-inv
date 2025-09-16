@@ -16,7 +16,6 @@ import {
   CheckCircle,
   XCircle,
 } from "lucide-react";
-// import generateInvoicePDF from "../utils/generateInvoicePDF";
 import { downloadInvoicePDF } from "../utils/index";
 
 const InvoiceEditor = () => {
@@ -131,64 +130,6 @@ const InvoiceEditor = () => {
     return errors;
   }, [invoiceData]);
 
-  // Enhanced PDF Download Handler with validation and better error handling
-  // const handleDownloadPDF = useCallback(async () => {
-  //   if (downloadState.isLoading) return;
-
-  //   // Reset states
-  //   setDownloadState({
-  //     isLoading: false,
-  //     success: false,
-  //     error: null,
-  //   });
-
-  //   // Validate data
-  //   const validationErrors = validateInvoiceData();
-  //   if (validationErrors.length > 0) {
-  //     setDownloadState({
-  //       isLoading: false,
-  //       success: false,
-  //       error: `Please fix the following issues:\n• ${validationErrors.join(
-  //         "\n• "
-  //       )}`,
-  //     });
-  //     return;
-  //   }
-
-  //   setDownloadState((prev) => ({ ...prev, isLoading: true }));
-
-  //   try {
-  //     // Add small delay to show loading state
-  //     await new Promise((resolve) => setTimeout(resolve, 500));
-
-  //     await generateInvoicePDF(invoiceData, logoImage, signatureImage);
-
-  //     setDownloadState({
-  //       isLoading: false,
-  //       success: true,
-  //       error: null,
-  //     });
-
-  //     // Reset success state after 3 seconds
-  //     setTimeout(() => {
-  //       setDownloadState((prev) => ({ ...prev, success: false }));
-  //     }, 3000);
-  //   } catch (error) {
-  //     console.error("PDF download failed:", error);
-  //     setDownloadState({
-  //       isLoading: false,
-  //       success: false,
-  //       error: error.message || "Failed to generate PDF. Please try again.",
-  //     });
-  //   }
-  // }, [
-  //   invoiceData,
-  //   logoImage,
-  //   signatureImage,
-  //   downloadState.isLoading,
-  //   validateInvoiceData,
-  // ]);
-
   const renderCurrencyOption = (country) => (
     <div className="flex items-center gap-2">
       <span className="bg-neutral-100 px-2 py-1.5 rounded-sm">
@@ -228,13 +169,13 @@ const InvoiceEditor = () => {
     }
   };
   return (
-    <div className="w-full max-h-screen p-6 bg-white overflow-y-auto border border-dashed border-neutral-100">
+    <div className="w-full px-4 py-6 bg-white overflow-y-auto">
       <div className="flex justify-end w-full items-center px-4 pb-4 border-b border-dashed border-neutral-100">
         <div className="flex flex-col items-end gap-2">
           <button
             onClick={handleDownloadPDF}
             disabled={downloadState.isLoading}
-            className={`bg-gradient-to-br from-orange-400 to-orange-500 pl-3 pr-4 py-2 rounded-lg border-2 border-orange-400 hover:shadow-md relative flex justify-center items-center overflow-hidden text-white gap-2 cursor-pointer transition-all duration-200 min-w-[140px] ${
+            className={`bg-gradient-to-br from-orange-400 to-orange-500 pl-1.5 pr-2 py-1.5 rounded-lg border-2 border-orange-400 hover:shadow-md relative flex justify-center items-center overflow-hidden text-white gap-2 cursor-pointer transition-all duration-200 min-w-[140px] ${
               downloadState.isLoading
                 ? "opacity-75 cursor-not-allowed"
                 : downloadState.success

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import InvoiceHeader from "../components/pdf/InvoiceHeader";
 import PaymentSection from "../components/pdf/PaymentSection";
 import ThankyouSection from "../components/pdf/ThankyouSection";
@@ -9,6 +9,8 @@ import BillingSection from "../components/pdf/BillingSection";
 import InvoiceEditor from "../components/editor/InvoiceEditor";
 import { useInvoice } from "../components/editor/InvoiceDataService";
 import Sidebar from "./Sidebar";
+import Navbar from "./ui/Navbar";
+import { EditIcon } from "lucide-react";
 
 const PdfInvoice = () => {
   const { invoiceData, logoImage, signatureImage } = useInvoice();
@@ -54,60 +56,106 @@ const PdfInvoice = () => {
 
   const defaultSignature =
     "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiB2aWV3Qm94PSIwIDAgMTAwIDQwIiBmaWxsPSJub25lIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciPgo8cmVjdCB3aWR0aD0iMTAwIiBoZWlnaHQ9IjQwIiBmaWxsPSIjRjNGNEY2Ii8+Cjx0ZXh0IHg9IjUwIiB5PSIyNSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjEwIiBmaWxsPSIjNkI3Mjg2Ij5TaWduYXR1cmU8L3RleHQ+Cjwvc3ZnPgo=";
+const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+const handleMenuToggle = () => {
+  setIsMobileMenuOpen(true);
+};
 
+const handleMenuClose = () => {
+  setIsMobileMenuOpen(false);
+};
   return (
-    <div className="flex flex-col justify-center items-center w-full min-h-screen bg-white">
-      <div className="flex justify-between w-full h-full">
-        <div className="w-[17%]">
+    <div className="flex flex-col w-full xl:h-screen bg-white xl:overflow-hidden pt-16">
+      <Navbar
+        onMenuToggle={handleMenuToggle}
+        onMenuClose={handleMenuClose}
+        isMenuOpen={isMobileMenuOpen}
+      />
+      <div className="flex flex-col md:flex-row w-full flex-1 overflow-hidden">
+        <div className="hidden xl:block xl:w-[17%] flex-shrink-0">
           <Sidebar />
         </div>
-        <div className="w-[40%]">
-          {/* Left Side - Invoice Editor */}
-          <InvoiceEditor />
-        </div>
 
-        {/* Right Side - PDF Preview */}
-        <div className="w-[43%] max-h-screen py-6 bg-neutral-50/50 overflow-y-auto text-xs">
-          <div className="bg-white shadow-lg max-w-[595px] mx-auto">
-            <div className="w-[595px] h-[842px] bg-white text-black font-sans text-sm p-6">
-              <div className="pb-3">
-                <h1 className="text-xl font-normal uppercase text-neutral-800">
-                  Invoice {invoice.invoiceNumber}
-                </h1>
+        {/* Mobile Menu Overlay */}
+        {isMobileMenuOpen && (
+          <>
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden"
+              onClick={handleMenuClose}
+              style={{ top: "64px" }} // Start below navbar (navbar height is h-16 = 64px)
+            />
+
+            {/* Mobile Sidebar */}
+            <div
+              className="fixed left-0 w-full bg-white z-50 md:hidden shadow-lg transform transition-transform duration-300 ease-in-out"
+              style={{
+                top: "64px", // Start below navbar
+                height: "calc(100vh - 64px)", // Full height minus navbar
+                position: "fixed", // Ensure it's fixed positioned
+              }}
+            >
+              <div className="h-full overflow-y-auto">
+                <Sidebar />
               </div>
+            </div>
+          </>
+        )}
+        <div className="flex flex-col w-full xl:w-[83%] bg-white flex-1 xl:overflow-hidden">
+          <div className="border-b border-dashed border-neutral-200 h-12 w-full flex-shrink-0 px-8 flex justify-start items-center gap-2">
+            <EditIcon className="text-neutral-600" size={14} />
+            <h1 className="text-neutral-600 text-sm"> Invoice Editor</h1>
+          </div>
+          <div className="flex flex-col xl:flex-row w-full flex-1 xl:overflow-hidden">
+            <div className="w-full xl:w-[45%] xl:overflow-y-auto">
+              {/* Left Side - Invoice Editor */}
+              <InvoiceEditor />
+            </div>
 
-              {/* Enhanced Invoice Header with Custom Fields */}
-              <InvoiceHeader
-                logo={logoImage || defaultLogo}
-                invoice={invoice}
-                customFields={invoiceData.customFields.basic}
-              />
+            {/* PDF Preview */}
+            <div className="w-full xl:w-[55%] py-6 bg-neutral-50/50 xl:overflow-y-auto text-xs">
+              <div className="bg-white shadow-lg max-w-[595px] mx-auto">
+                <div className="w-[595px] h-[842px] bg-white text-black font-sans text-sm p-6">
+                  <div className="pb-3">
+                    <h1 className="text-xl font-normal uppercase text-neutral-800">
+                      Invoice {invoice.invoiceNumber}
+                    </h1>
+                  </div>
 
-              <BillingSection
-                sender={details.sender}
-                receiver={details.receiver}
-                customFields={invoiceData.customFields}
-              />
+                  {/* Enhanced Invoice Header with Custom Fields */}
+                  <InvoiceHeader
+                    logo={logoImage || defaultLogo}
+                    invoice={invoice}
+                    customFields={invoiceData.customFields.basic}
+                  />
 
-              <ItemsSection product={product} />
+                  <BillingSection
+                    sender={details.sender}
+                    receiver={details.receiver}
+                    customFields={invoiceData.customFields}
+                  />
 
-              <CalculationSection product={product} />
+                  <ItemsSection product={product} />
 
-              <PaymentSection
-                payment={payment}
-                signature={signatureImage || defaultSignature}
-                text={invoiceData.signatureText}
-              />
+                  <CalculationSection product={product} />
 
-              <NotesOrTermsSection
-                title={invoiceData.termsSection.title}
-                text={invoiceData.termsSection.text}
-              />
+                  <PaymentSection
+                    payment={payment}
+                    signature={signatureImage || defaultSignature}
+                    text={invoiceData.signatureText}
+                  />
 
-              <ThankyouSection
-                title={invoiceData.thankyouSection.title}
-                text={invoiceData.thankyouSection.text}
-              />
+                  <NotesOrTermsSection
+                    title={invoiceData.termsSection.title}
+                    text={invoiceData.termsSection.text}
+                  />
+
+                  <ThankyouSection
+                    title={invoiceData.thankyouSection.title}
+                    text={invoiceData.thankyouSection.text}
+                  />
+                </div>
+              </div>
             </div>
           </div>
         </div>
