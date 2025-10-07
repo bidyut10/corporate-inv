@@ -82,7 +82,7 @@ const BasicInfoEditor = ({
                 type="date"
                 value={invoiceData.issueDate}
                 onChange={(e) => updateBasicInfo("issueDate", e.target.value)}
-                className={inputClass}
+                className={inputClass + " cursor-pointer"}
               />
             </div>
             <div>
@@ -91,7 +91,7 @@ const BasicInfoEditor = ({
                 type="date"
                 value={invoiceData.dueDate}
                 onChange={(e) => updateBasicInfo("dueDate", e.target.value)}
-                className={inputClass}
+                className={inputClass + " cursor-pointer"}
               />
             </div>
             <div>

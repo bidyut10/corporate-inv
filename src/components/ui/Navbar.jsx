@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, Sparkles, X, MoreVertical, Moon, Github } from "lucide-react";
+import { Menu, X, Github } from "lucide-react";
 import Logo from "./Logo";
 
 const Navbar = ({
@@ -35,6 +35,7 @@ const Navbar = ({
 
   const handleMenuClose = () => onMenuClose();
 
+  const githubBtnClick=()=>{window.location.href("https://github.com/bidyut10");}
   return (
     <nav className="fixed top-0 left-0 right-0 border-b w-full border-dashed border-neutral-200 bg-white text-neutral-800 transition-all duration-300 ease-in-out selection:bg-neutral-200 selection:text-neutral-950 dark:border-[#1c1c1c] dark:bg-[#181818] z-50">
       <div className="mx-auto flex h-16 max-w-full bg-white items-center justify-between">
@@ -82,14 +83,16 @@ const Navbar = ({
         >
           <div className={`flex items-center justify-end gap-2`}>
             <button
-              className="flex items-center w-8 h-8 p-2 cursor-pointer text-xs text-neutral-800 bg-neutral-50/50 rounded-md transition-all duration-200 group border border-transparent hover:border-neutral-200"
-              // onClick={}
+              className="flex items-center w-8 h-8 p-2 cursor-pointer text-xs text-neutral-800 bg-neutral-50/50 rounded-md transition-all duration-200 group border border-transparent hover:border-neutral-100"
+              onClick={() =>
+                window.open("https://github.com/bidyut10", "_blank")
+              }
               type="button"
               style={{ touchAction: "manipulation" }}
             >
               <Github
                 size={14}
-                className="pointer-events-none text-neutral-700  group-hover:text-neutral-700 group-hover:fill-neutral-800 transition-colors duration-300 ease-in-out"
+                className="pointer-events-none text-neutral-700  group-hover:text-neutral-700 transition-colors duration-300 ease-in-out"
               />
             </button>
           </div>

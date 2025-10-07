@@ -12,18 +12,17 @@ const Sidebar = () => {
         <FileText className="text-neutral-900" size={12} />
         <h1 className="text-neutral-900 text-sm">Create Invoice</h1>
       </div>
-      <div className="ml-6 flex justify-start items-center gap-2 mt-3">
+      {/* <div className="ml-6 flex justify-start items-center gap-2 mt-3">
         <FileText className="text-neutral-800" size={13} />
         <h1 className="text-neutral-800 text-sm">Create Receipt</h1>
-      </div>
-      <div className="flex justify-start items-center gap-2 bg-neutral-50/50 rounded-sm px-4 py-1 mt-6">
-        {/* <Home className="text-neutral-800" size={10} /> */}
+      </div> */}
+      {/* <div className="flex justify-start items-center gap-2 bg-neutral-50/50 rounded-sm px-4 py-1 mt-6">
         <h1 className="text-neutral-800 text-xs">Product</h1>
-      </div>
-      <div className="flex justify-start items-center gap-2 mt-3 ml-6">
+      </div> */}
+      {/* <div className="flex justify-start items-center gap-2 mt-3 ml-6">
         <Tag className="text-neutral-900" size={12} />
         <h1 className="text-neutral-900 text-sm">Create Label</h1>
-      </div>
+      </div> */}
       {/* <div className="flex justify-start items-center gap-2 mt-3 ml-6">
         <FileText className="text-neutral-600" size={13} />
         <h1 className="text-neutral-600 text-sm">Create Receipt</h1>

@@ -10,8 +10,6 @@ import ClientEditor from "./ClientEditor";
 import ItemsEditor from "./ItemsEditor";
 import {
   ArrowDownToLine,
-  Plus,
-  Save,
   Loader2,
   CheckCircle,
   XCircle,
@@ -175,7 +173,7 @@ const InvoiceEditor = () => {
           <button
             onClick={handleDownloadPDF}
             disabled={downloadState.isLoading}
-            className={`bg-gradient-to-br from-orange-400 to-orange-500 pl-1.5 pr-2 py-1.5 rounded-lg border-2 border-orange-400 hover:shadow-md relative flex justify-center items-center overflow-hidden text-white gap-2 cursor-pointer transition-all duration-200 min-w-[140px] ${
+            className={`bg-gradient-to-br from-orange-400 to-orange-500 pl-1.5 pr-2 py-1.5 rounded-lg border-2 border-orange-400 relative flex justify-center items-center overflow-hidden text-white gap-2 cursor-pointer transition-all duration-200 min-w-[140px] ${
               downloadState.isLoading
                 ? "opacity-75 cursor-not-allowed"
                 : downloadState.success
