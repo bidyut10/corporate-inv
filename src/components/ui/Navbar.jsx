@@ -35,7 +35,6 @@ const Navbar = ({
 
   const handleMenuClose = () => onMenuClose();
 
-  const githubBtnClick=()=>{window.location.href("https://github.com/bidyut10");}
   return (
     <nav className="fixed top-0 left-0 right-0 border-b w-full border-dashed border-neutral-200 bg-white text-neutral-800 transition-all duration-300 ease-in-out selection:bg-neutral-200 selection:text-neutral-950 dark:border-[#1c1c1c] dark:bg-[#181818] z-50">
       <div className="mx-auto flex h-16 max-w-full bg-white items-center justify-between">
