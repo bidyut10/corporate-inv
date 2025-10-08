@@ -12,7 +12,7 @@ import Sidebar from "./Sidebar";
 import Navbar from "./ui/Navbar";
 import { EditIcon } from "lucide-react";
 
-const PdfInvoice = () => {
+const PdfInvoice = ({ onSelect }) => {
   const { invoiceData, logoImage, signatureImage } = useInvoice();
 
   // Create the data structures that your existing components expect
@@ -73,7 +73,7 @@ const handleMenuClose = () => {
       />
       <div className="flex flex-col md:flex-row w-full flex-1 overflow-hidden">
         <div className="hidden xl:block xl:w-[17%] flex-shrink-0">
-          <Sidebar />
+          <Sidebar active="invoice" onSelect={onSelect} />
         </div>
 
         {/* Mobile Menu Overlay */}
@@ -96,7 +96,7 @@ const handleMenuClose = () => {
               }}
             >
               <div className="h-full overflow-y-auto">
-                <Sidebar />
+                <Sidebar active="invoice" onSelect={onSelect} />
               </div>
             </div>
           </>
