@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Plus, Edit3, Save, Trash2 } from "lucide-react";
-import Accordion from "../common/Accordion";
-import CustomFieldModal from "../common/CustomFieldModal";
+import Accordion from "../../common/Accordion";
+import CustomFieldModal from "../../common/CustomFieldModal";
 
 const CompanyEditor = ({
   openSections,

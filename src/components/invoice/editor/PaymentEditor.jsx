@@ -1,5 +1,5 @@
 import React from 'react'
-import Accordion from '../common/Accordion';
+import Accordion from "../../common/Accordion";
 import{Plus, Trash2} from 'lucide-react'
 
 const PaymentEditor = ({

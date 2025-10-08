@@ -2,16 +2,15 @@ import React, { useState } from "react";
 import ReceiptEditor from "./editor/ReceiptEditor";
 import { useReceipt } from "./editor/ReceiptDataService";
 import Navbar from "../ui/Navbar";
-import Sidebar from "../Sidebar";
+import Sidebar from "../ui/Sidebar";
 import { EditIcon } from "lucide-react";
 import ReceiptHeader from "./ReceiptHeader";
-import BillingSection from "../pdf/BillingSection";
-import ItemsSection from "../pdf/ItemsSection";
-import CalculationSection from "../pdf/CalculationSection";
+import BillingSection from "../invoice/pdf/BillingSection";
+import ItemsSection from "../invoice/pdf/ItemsSection";
 import ReceiptCalculationSection from "./ReceiptCalculationSection";
-import PaymentSection from "../pdf/PaymentSection";
-import NotesOrTermsSection from "../pdf/NotesOrTermsSection";
-import ThankyouSection from "../pdf/ThankyouSection";
+import PaymentSection from "../invoice/pdf/PaymentSection";
+import NotesOrTermsSection from "../invoice/pdf/NotesOrTermsSection";
+import ThankyouSection from "../invoice/pdf/ThankyouSection";
 
 const PdfReceipt = ({ onSelect }) => {
   const { receiptData, logoImage, signatureImage } = useReceipt();

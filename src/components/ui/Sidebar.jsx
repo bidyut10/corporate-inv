@@ -1,5 +1,5 @@
-import { FileText, Home, Tag, Wallet } from 'lucide-react';
 import React from 'react'
+import { FileText } from 'lucide-react';
 
 const Sidebar = ({ active = 'invoice', onSelect = () => {} }) => {
   return (
@@ -16,7 +16,7 @@ const Sidebar = ({ active = 'invoice', onSelect = () => {} }) => {
         <FileText className={active === 'receipt' ? "text-neutral-900" : "text-neutral-500"} size={13} />
         <h1 className={active === 'receipt' ? "text-neutral-900 text-sm" : "text-neutral-500 text-sm"}>Create Receipt</h1>
       </button>
-      <div className="flex justify-start items-center gap-2 bg-neutral-50/50 rounded-sm px-4 py-1 mt-6">
+      {/* <div className="flex justify-start items-center gap-2 bg-neutral-50/50 rounded-sm px-4 py-1 mt-6">
         <h1 className="text-neutral-800 text-xs">Product</h1>
       </div>
       <div className="flex justify-start items-center gap-2 mt-3 ml-6">
@@ -26,7 +26,7 @@ const Sidebar = ({ active = 'invoice', onSelect = () => {} }) => {
       <div className="flex justify-start items-center gap-2 mt-3 ml-6">
         <FileText className="text-neutral-600" size={13} />
         <h1 className="text-neutral-600 text-sm">Create Receipt</h1>
-      </div>
+      </div> */}
     </div>
   );
 }

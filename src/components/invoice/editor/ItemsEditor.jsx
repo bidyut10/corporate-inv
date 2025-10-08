@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import Accordion from "../common/Accordion";
+import Accordion from "../../common/Accordion";
 import { Plus, Trash2, Edit3, Save } from "lucide-react";
-import CustomItemModal from "../common/CustomItemModal";
+import CustomItemModal from "../../common/CustomItemModal";
 import { primaryButtonClass, secondaryButtonClass } from "../data/data";
 
 const ItemsEditor = ({

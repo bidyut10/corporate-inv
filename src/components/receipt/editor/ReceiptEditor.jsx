@@ -1,13 +1,13 @@
 import React, { useState, useCallback } from "react";
 import { useReceipt } from "./ReceiptDataService";
-import ImageEditor from "../../editor/ImageEditor";
-import PaymentEditor from "../../editor/PaymentEditor";
-import FooterEditor from "../../editor/FooterEditor";
-import AdditionalInfoEditor from "../../editor/AdditionalInfoEditor";
+import ImageEditor from "../../invoice/editor/ImageEditor";
+import PaymentEditor from "../../invoice/editor/PaymentEditor";
+import FooterEditor from "../../invoice/editor/FooterEditor";
+import AdditionalInfoEditor from "../../invoice/editor/AdditionalInfoEditor";
 import ReceiptBasicInfoEditor from "./ReceiptBasicInfoEditor";
-import CompanyEditor from "../../editor/CompanyEditor";
-import ClientEditor from "../../editor/ClientEditor";
-import ItemsEditor from "../../editor/ItemsEditor";
+import CompanyEditor from "../../invoice/editor/CompanyEditor";
+import ClientEditor from "../../invoice/editor/ClientEditor";
+import ItemsEditor from "../../invoice/editor/ItemsEditor";
 import { ArrowDownToLine, Loader2, CheckCircle, XCircle } from "lucide-react";
 import { downloadReceiptPDF } from "../utils/index";
 

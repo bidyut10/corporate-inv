@@ -1,15 +1,15 @@
 import React, { useState } from "react";
-import InvoiceHeader from "../components/pdf/InvoiceHeader";
-import PaymentSection from "../components/pdf/PaymentSection";
-import ThankyouSection from "../components/pdf/ThankyouSection";
-import NotesOrTermsSection from "../components/pdf/NotesOrTermsSection";
-import ItemsSection from "../components/pdf/ItemsSection";
-import CalculationSection from "../components/pdf/CalculationSection";
-import BillingSection from "../components/pdf/BillingSection";
-import InvoiceEditor from "../components/editor/InvoiceEditor";
-import { useInvoice } from "../components/editor/InvoiceDataService";
-import Sidebar from "./Sidebar";
-import Navbar from "./ui/Navbar";
+import InvoiceHeader from "../../components/invoice/pdf/InvoiceHeader";
+import PaymentSection from "../../components/invoice/pdf/PaymentSection";
+import ThankyouSection from "../../components/invoice/pdf/ThankyouSection";
+import NotesOrTermsSection from "../../components/invoice/pdf/NotesOrTermsSection";
+import ItemsSection from "../../components/invoice/pdf/ItemsSection";
+import CalculationSection from "../../components/invoice/pdf/CalculationSection";
+import BillingSection from "../../components/invoice/pdf/BillingSection";
+import InvoiceEditor from "../../components/invoice/editor/InvoiceEditor";
+import { useInvoice } from "../../components/invoice/editor/InvoiceDataService";
+import Sidebar from "../ui/Sidebar";
+import Navbar from "../ui/Navbar";
 import { EditIcon } from "lucide-react";
 
 const PdfInvoice = ({ onSelect }) => {

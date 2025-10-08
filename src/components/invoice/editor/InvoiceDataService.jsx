@@ -1,5 +1,6 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
 import { currency, defaultInvoiceData } from "../data/data";
+import { idbSet, idbGet, idbDelete } from "../utils/imageStore";
 
 const themes = [{ name: "Light", value: "light" }];
 
@@ -14,9 +15,31 @@ export const useInvoice = () => {
 };
 
 export const InvoiceProvider = ({ children }) => {
-  const [invoiceData, setInvoiceData] = useState(defaultInvoiceData);
+  const [invoiceData, setInvoiceData] = useState(() => {
+    try {
+      const saved = localStorage.getItem("invoiceData");
+      return saved ? JSON.parse(saved) : defaultInvoiceData;
+    } catch {
+      return defaultInvoiceData;
+    }
+  });
   const [logoImage, setLogoImage] = useState(null);
   const [signatureImage, setSignatureImage] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("invoiceData", JSON.stringify(invoiceData));
+  }, [invoiceData]);
+
+  useEffect(() => {
+    (async () => {
+      const [logo, sig] = await Promise.all([
+        idbGet("invoice_logo"),
+        idbGet("invoice_signature"),
+      ]);
+      if (logo) setLogoImage(logo);
+      if (sig) setSignatureImage(sig);
+    })();
+  }, []);
 
   // Update functions
   const updateBasicInfo = (field, value) => {
@@ -167,9 +190,14 @@ export const InvoiceProvider = ({ children }) => {
 
   const uploadLogo = (file) => {
     try {
+      if (file.size > 500 * 1024) {
+        throw new Error("Logo must be <= 500KB");
+      }
       const reader = new FileReader();
       reader.onload = (e) => {
-        setLogoImage(e.target.result);
+        const dataUrl = e.target.result;
+        setLogoImage(dataUrl);
+        idbSet("invoice_logo", dataUrl);
       };
       reader.readAsDataURL(file);
     } catch (error) {
@@ -179,9 +207,14 @@ export const InvoiceProvider = ({ children }) => {
 
   const uploadSignature = (file) => {
     try {
+      if (file.size > 500 * 1024) {
+        throw new Error("Signature must be <= 500KB");
+      }
       const reader = new FileReader();
       reader.onload = (e) => {
-        setSignatureImage(e.target.result);
+        const dataUrl = e.target.result;
+        setSignatureImage(dataUrl);
+        idbSet("invoice_signature", dataUrl);
       };
       reader.readAsDataURL(file);
     } catch (error) {
@@ -191,10 +224,12 @@ export const InvoiceProvider = ({ children }) => {
 
   const removeLogo = () => {
     setLogoImage(null);
+    idbDelete("invoice_logo");
   };
 
   const removeSignature = () => {
     setSignatureImage(null);
+    idbDelete("invoice_signature");
   };
 
   // Calculate totals

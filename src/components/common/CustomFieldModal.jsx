@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { X } from "lucide-react";
-import { primaryButtonClass, secondaryButtonClass } from "../data/data";
+import { primaryButtonClass, secondaryButtonClass } from "../invoice/data/data";
 
 const CustomFieldModal = ({
   isOpen,

@@ -1,5 +1,5 @@
 import React from 'react'
-import Accordion from '../common/Accordion';
+import Accordion from "../../common/Accordion";
 import {ImageMinus, ImagePlus, PenLine, PenOff, PenTool, X} from 'lucide-react'
 
 const ImageEditor = ({

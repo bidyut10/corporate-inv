@@ -88,10 +88,8 @@ const Logo = () => {
       </div>
 
       <div className="ml-1">
-        <h1 className="text-md font-bold text-neutral-900">Freeinvo</h1>
-        <p className="text-[10px] text-neutral-600 mt-">
-          Invoice Creation Tool
-        </p>
+        <h1 className="text-md font-bold text-neutral-900">Paperdoc</h1>
+        <p className="text-[10px] text-neutral-600 mt-">Docs made effortless</p>
       </div>
     </div>
   );

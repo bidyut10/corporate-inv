@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { Plus, Trash2, Edit3, Save, X } from "lucide-react";
-import Accordion from "../common/Accordion";
-import Dropdown from "../common/Dropdown";
+import Accordion from "../../common/Accordion";
+import Dropdown from "../../common/Dropdown";
 import { primaryButtonClass, secondaryButtonClass } from "../data/data";
 
 const BasicInfoEditor = ({

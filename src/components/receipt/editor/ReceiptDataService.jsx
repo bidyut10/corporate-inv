@@ -1,6 +1,7 @@
-import React, { createContext, useContext, useState } from "react";
-import { currency } from "../../data/data";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { currency } from "../../invoice/data/data";
 import { defaultReceiptData } from "../data";
+import { idbSet, idbGet, idbDelete } from "../../invoice/utils/imageStore";
 
 const themes = [{ name: "Light", value: "light" }];
 
@@ -15,9 +16,31 @@ export const useReceipt = () => {
 };
 
 export const ReceiptProvider = ({ children }) => {
-  const [receiptData, setReceiptData] = useState(defaultReceiptData);
+  const [receiptData, setReceiptData] = useState(() => {
+    try {
+      const saved = localStorage.getItem("receiptData");
+      return saved ? JSON.parse(saved) : defaultReceiptData;
+    } catch {
+      return defaultReceiptData;
+    }
+  });
   const [logoImage, setLogoImage] = useState(null);
   const [signatureImage, setSignatureImage] = useState(null);
+
+  useEffect(() => {
+    localStorage.setItem("receiptData", JSON.stringify(receiptData));
+  }, [receiptData]);
+
+  useEffect(() => {
+    (async () => {
+      const [logo, sig] = await Promise.all([
+        idbGet("receipt_logo"),
+        idbGet("receipt_signature"),
+      ]);
+      if (logo) setLogoImage(logo);
+      if (sig) setSignatureImage(sig);
+    })();
+  }, []);
 
   const updateBasicInfo = (field, value) => {
     setReceiptData((prev) => ({ ...prev, [field]: value }));
@@ -145,9 +168,14 @@ export const ReceiptProvider = ({ children }) => {
 
   const uploadLogo = (file) => {
     try {
+      if (file.size > 500 * 1024) {
+        throw new Error("Logo must be <= 500KB");
+      }
       const reader = new FileReader();
       reader.onload = (e) => {
-        setLogoImage(e.target.result);
+        const dataUrl = e.target.result;
+        setLogoImage(dataUrl);
+        idbSet("receipt_logo", dataUrl);
       };
       reader.readAsDataURL(file);
     } catch (error) {
@@ -157,9 +185,14 @@ export const ReceiptProvider = ({ children }) => {
 
   const uploadSignature = (file) => {
     try {
+      if (file.size > 500 * 1024) {
+        throw new Error("Signature must be <= 500KB");
+      }
       const reader = new FileReader();
       reader.onload = (e) => {
-        setSignatureImage(e.target.result);
+        const dataUrl = e.target.result;
+        setSignatureImage(dataUrl);
+        idbSet("receipt_signature", dataUrl);
       };
       reader.readAsDataURL(file);
     } catch (error) {
@@ -169,10 +202,12 @@ export const ReceiptProvider = ({ children }) => {
 
   const removeLogo = () => {
     setLogoImage(null);
+    idbDelete("receipt_logo");
   };
 
   const removeSignature = () => {
     setSignatureImage(null);
+    idbDelete("receipt_signature");
   };
 
   const subtotal = receiptData.items.reduce((sum, item) => sum + item.qty * item.price, 0);

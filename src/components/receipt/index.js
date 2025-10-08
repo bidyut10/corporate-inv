@@ -1,4 +1,4 @@
-export { ReceiptProvider, useReceipt } from "./editor/ReceiptDataService";
+export { ReceiptProvider, useReceipt } from "../receipt/editor/ReceiptDataService";
 export { default as PdfReceipt } from "./Receipt";
 
 

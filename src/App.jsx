@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import { InvoiceProvider } from "./components/editor/InvoiceDataService";
-import PdfInvoice from "./components/Pdf"; 
+import { InvoiceProvider } from "./components/invoice/editor/InvoiceDataService";
+import PdfInvoice from "./components/invoice/PdfInvoice"; 
 import { ReceiptProvider } from "./components/receipt";
 import { default as PdfReceipt } from "./components/receipt/Receipt";
 import "./App.css";
