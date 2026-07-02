@@ -80,19 +80,26 @@ const Navbar = ({
         <div
           className={`flex items-center justify-between gap-4 border-x-none h-full px-4 md:px-6 xl:border-x xl:border-dashed xl:border-neutral-200`}
         >
-          <div className={`flex items-center justify-end gap-2`}>
+          <div className={`flex items-center justify-end gap-4`}>
             <button
-              className="flex items-center w-8 h-8 p-2 cursor-pointer text-xs text-neutral-800 bg-neutral-50/50 rounded-md transition-all duration-200 group border border-transparent hover:border-neutral-100"
+              className="flex items-center font-mono text-xs cursor-pointer text-neutral-700 border-b border-neutral-700 hover:text-neutral-900 transition-colors duration-300 ease-in-out"
               onClick={() =>
                 window.open("https://github.com/bidyut10", "_blank")
               }
               type="button"
               style={{ touchAction: "manipulation" }}
             >
-              <Github
-                size={14}
-                className="pointer-events-none text-neutral-700  group-hover:text-neutral-700 transition-colors duration-300 ease-in-out"
-              />
+              <h1>Github</h1>
+            </button>
+            <button
+              className="flex items-center font-mono text-xs cursor-pointer text-neutral-700 border-b border-neutral-700 hover:text-neutral-900 transition-colors duration-300 ease-in-out"
+              onClick={() =>
+                window.open("https://x.com/BidyutKundu12", "_blank")
+              }
+              type="button"
+              style={{ touchAction: "manipulation" }}
+            >
+              <h1>Twitter</h1>
             </button>
           </div>
         </div>
