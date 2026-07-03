@@ -36,12 +36,12 @@ const Navbar = ({
   const handleMenuClose = () => onMenuClose();
 
   return (
-    <nav className="fixed top-0 left-0 right-0 border-b w-full border-dashed border-neutral-200 bg-white text-neutral-800 transition-all duration-300 ease-in-out selection:bg-neutral-200 selection:text-neutral-950 dark:border-[#1c1c1c] dark:bg-[#181818] z-50">
+    <nav className="fixed top-0 left-0 right-0 border-b w-full border-neutral-100 bg-white text-neutral-800 transition-all duration-300 ease-in-out selection:bg-neutral-200 selection:text-neutral-950 dark:border-[#1c1c1c] dark:bg-[#181818] z-50">
       <div className="mx-auto flex h-16 max-w-full bg-white items-center justify-between">
         <div
           className={`flex items-center justify-between gap-4 ${
             isMobile ? "w-fit" : "w-[17%]"
-          } border-x-none h-full px-4 md:px-6 xl:border-x xl:border-dashed xl:border-neutral-200`}
+          } border-x-none h-full px-4 md:px-6 xl:border-x xl:border-neutral-100`}
         >
           {isMobile ? (
             <>
@@ -65,7 +65,7 @@ const Navbar = ({
                 )}
               </button>
               <div className="flex items-center justify-center gap-2">
-                <Logo />
+                <Logo className="h-8 md:h-12"/>
               </div>
             </>
           ) : (
@@ -78,7 +78,7 @@ const Navbar = ({
         </div>
 
         <div
-          className={`flex items-center justify-between gap-4 border-x-none h-full px-4 md:px-6 xl:border-x xl:border-dashed xl:border-neutral-200`}
+          className={`flex items-center justify-between gap-4 h-full px-4 md:px-6`}
         >
           <div className={`flex items-center justify-end gap-4`}>
             <button

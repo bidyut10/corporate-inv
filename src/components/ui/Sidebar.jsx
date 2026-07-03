@@ -3,7 +3,7 @@ import { FileText } from 'lucide-react';
 
 const Sidebar = ({ active = 'invoice', onSelect = () => {} }) => {
   return (
-    <div className="w-full h-full bg-white px-4 py-4 border-r border-dashed border-neutral-200 animate-slide-in">
+    <div className="w-full h-full bg-white px-4 py-4 border-r border-neutral-100 animate-slide-in">
       <div className="flex justify-start items-center gap-2 bg-neutral-50/50 rounded-sm px-4 py-1">
         {/* <Wallet className="text-neutral-900" size={12} /> */}
         <h1 className="text-neutral-900 text-xs">Finance</h1>

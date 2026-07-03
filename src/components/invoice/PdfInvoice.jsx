@@ -102,7 +102,7 @@ const handleMenuClose = () => {
           </>
         )}
         <div className="flex flex-col w-full xl:w-[83%] bg-white flex-1 xl:overflow-hidden">
-          <div className="border-b border-dashed border-neutral-200 h-12 w-full flex-shrink-0 px-8 flex justify-start items-center gap-2">
+          <div className="border-b border-neutral-100 h-12 w-full flex-shrink-0 px-8 flex justify-start items-center gap-2">
             <EditIcon className="text-neutral-600" size={14} />
             <h1 className="text-neutral-600 text-sm"> Invoice Editor</h1>
           </div>
