@@ -71,7 +71,7 @@ const Navbar = ({
           ) : (
             <>
               <div className="flex items-center justify-center gap-2">
-                <Logo />
+                <Logo className="h-10" />
               </div>
             </>
           )}

@@ -1,15 +1,16 @@
 import { useNavigate } from "react-router-dom";
+import paperdocLogo from "../../assets/paperdoc-logo.png";
 
-const Logo = () => {
+const Logo = ({ className = "h-12 w-auto" }) => {
   const navigate = useNavigate();
 
   return (
     <button
       type="button"
       onClick={() => navigate("/")}
-      className="font-mono text-lg font-medium text-neutral-950 cursor-pointer transition-opacity hover:opacity-70"
+      className="cursor-pointer transition-opacity hover:opacity-90 select-none"
     >
-      Paperdoc
+      <img src={paperdocLogo} alt="Paperdoc" className={className} />
     </button>
   );
 };

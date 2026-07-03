@@ -2,8 +2,9 @@ import React from "react";
 import { ArrowUpRight } from "lucide-react";
 import InvoiceSkeleton from "./InvoiceSkeleton";
 import PhoneFrame from "./PhoneFrame";
+import Logo from "../ui/Logo";
 import editor from "../../assets/editor.png";
-import wallpaper3 from "../../assets/wallpaper-3.png";
+import wallpaper3 from "../../assets/dith-homee.png";
 import wallpaper4 from "../../assets/wallpaper-4.png";
 import wallpaper5 from "../../assets/wallpaper-5.png";
 import wallpaper6 from "../../assets/wallpaper-6.png";
@@ -36,6 +37,17 @@ const HOW_IT_WORKS = [
   "When everything looks right, review the layout and totals one last time. Change anything you want before you download.",
   "Save your invoice as a PDF and send it to your client. From blank page to finished document in minutes.",
 ];
+
+const WALLPAPER_MASK = {
+  WebkitMaskImage:
+    "linear-gradient(to bottom, #000 0%, #000 35%, rgba(0,0,0,0.75) 55%, rgba(0,0,0,0.35) 72%, transparent 90%)",
+  maskImage:
+    "linear-gradient(to bottom, #000 0%, #000 35%, rgba(0,0,0,0.75) 55%, rgba(0,0,0,0.35) 72%, transparent 90%)",
+  WebkitMaskSize: "100% 100%",
+  maskSize: "100% 100%",
+  WebkitMaskRepeat: "no-repeat",
+  maskRepeat: "no-repeat",
+};
 
 function BgCard({ image, className, overlayClass, children }) {
   return (
@@ -130,23 +142,35 @@ const LandingPage = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-white text-neutral-600">
       <section className="relative bg-white">
-        <div className="pointer-events-none absolute inset-x-0 top-0 h-dvh overflow-hidden rounded-b-[2rem] md:rounded-b-[4rem]">
-          <img
-            src={wallpaper3}
-            alt=""
-            className="h-full w-full object-cover object-top"
-          />
+        <div className="pointer-events-none absolute inset-x-0 top-0 w-full bg-white">
+          <div className="relative overflow-hidden bg-white">
+            <img
+              src={wallpaper3}
+              alt=""
+              className="block w-full scale-[1.03] h-auto"
+              style={WALLPAPER_MASK}
+            />
+            <div
+              className="absolute inset-x-0 bottom-0 h-[50%]"
+              style={{
+                background:
+                  "linear-gradient(to bottom, transparent 0%, rgba(255,255,255,0.55) 32%, #ffffff 52%, #ffffff 100%)",
+              }}
+              aria-hidden="true"
+            />
+            <div className="absolute inset-x-0 bottom-0 h-4 bg-white" aria-hidden="true" />
+          </div>
         </div>
 
         <header className="relative z-10">
           <div className="mx-auto flex max-w-5xl items-center justify-center px-6 py-5 md:px-10 md:py-7">
-            <span className="font-mono text-lg font-medium text-neutral-950">Paperdoc</span>
+            <Logo/>
           </div>
         </header>
 
         <div className="relative z-10 flex min-h-[52dvh] flex-col items-center justify-center px-6 pt-8 text-center md:min-h-[48dvh] md:pt-12">
-          <p className="text-xs text-neutral-600 bg-white py-1 px-3 rounded-full">Free · No account needed</p>
-          <h1 className="font-sans mt-4 max-w-2xl text-4xl leading-[1.12] text-neutral-950">
+          <p className="text-xs text-neutral-600 bg-white/30 bg-transparent py-1 px-3 rounded-full">Free · No account needed</p>
+          <h1 className="font-sans mt-4 max-w-2xl text-4xl leading-[1.12] text-black">
             Create invoices <br /> that look professional
           </h1>
           <p className="mx-auto mt-5 max-w-lg text-base leading-relaxed text-neutral-800 md:max-w-lg">
@@ -258,7 +282,7 @@ const LandingPage = ({ onNavigate }) => {
 
         <footer>
           <div className="mx-auto max-w-2xl px-6 py-10 md:py-12">
-            <p className="font-mono text-sm font-medium text-neutral-950">Paperdoc</p>
+            <Logo className="h-5 w-auto" />
             <p className="mt-4 text-sm leading-relaxed text-neutral-500">
               Made by{" "}
               <span className="text-neutral-800">Bidyut Kundu</span>
