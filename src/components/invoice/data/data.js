@@ -166,5 +166,10 @@ export const currency = {
 
 export const themes = [{ name: "Light", value: "light" }];
 
-export const primaryButtonClass = "flex-1 px-4 py-2 bg-gradient-to-r from-cyan-400 to-cyan-500 text-white rounded hover:shadow-lg hover:shadow-neutral-200/50 cursor-pointer disabled:from-neutral-300 disabled:to-neutral-300 disabled:cursor-not-allowed transition-colors"
-export const secondaryButtonClass = "flex-1 px-4 py-2 bg-neutral-900 text-white rounded cursor-pointer w-full"
+export const editorInputClass =
+  "w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm bg-white transition-colors focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900/10";
+
+export const editorLabelClass = "block text-xs font-medium text-neutral-700 mb-1";
+
+export const primaryButtonClass = "flex-1 px-4 py-2 bg-neutral-900 text-white rounded-sm hover:bg-neutral-800 cursor-pointer disabled:bg-neutral-300 disabled:cursor-not-allowed transition-colors"
+export const secondaryButtonClass = "flex-1 px-4 py-2 border border-neutral-300 text-neutral-700 rounded-sm hover:bg-neutral-50 cursor-pointer w-full transition-colors"

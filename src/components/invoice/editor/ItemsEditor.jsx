@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import Accordion from "../../common/Accordion";
+import NumberInput from "../../common/NumberInput";
 import { Plus, Trash2, Edit3, Save } from "lucide-react";
 import CustomItemModal from "../../common/CustomItemModal";
-import { primaryButtonClass, secondaryButtonClass } from "../data/data";
+import { editorInputClass, primaryButtonClass, secondaryButtonClass } from "../data/data";
+
+const numberInputClass = `${editorInputClass}`;
 
 const ItemsEditor = ({
   invoiceData,
@@ -12,6 +15,7 @@ const ItemsEditor = ({
   removeItem,
   editingStates,
   updateTax,
+  updateReceivedAmount,
   buttonClass,
   updateItem,
   addItem,
@@ -60,8 +64,7 @@ const ItemsEditor = ({
   const handleInputChange = (field, value) => {
     setItemForm((prev) => ({
       ...prev,
-      [field]:
-        field === "qty" || field === "price" ? parseFloat(value) || 0 : value,
+      [field]: value,
     }));
   };
 
@@ -129,12 +132,11 @@ const ItemsEditor = ({
               </span>
               {editingStates.tax ? (
                 <div className="flex gap-2">
-                  <input
-                    type="number"
-                    step="0.01"
+                  <NumberInput
                     value={invoiceData.tax}
-                    onChange={(e) => updateTax(e.target.value)}
-                    className="w-24 px-2 py-1 bg-white border border-neutral-300 rounded focus:outline-none focus:border-cyan-500"
+                    onChange={updateTax}
+                    min={0}
+                    className={`${numberInputClass} w-24 px-2 py-1`}
                   />
                   <button
                     onClick={() => toggleEdit("tax")}
@@ -158,6 +160,41 @@ const ItemsEditor = ({
                 </div>
               )}
             </div>
+
+            {updateReceivedAmount && (
+              <div className="flex justify-between items-center p-3 bg-neutral-50 rounded-lg mt-3">
+                <span className="font-medium text-xs text-neutral-800">Amount Received</span>
+                {editingStates.receivedAmount ? (
+                  <div className="flex gap-2">
+                    <NumberInput
+                      value={invoiceData.receivedAmount ?? 0}
+                      onChange={updateReceivedAmount}
+                      min={0}
+                      className={`${numberInputClass} w-24 px-2 py-1`}
+                    />
+                    <button
+                      onClick={() => toggleEdit("receivedAmount")}
+                      className="p-2 rounded bg-neutral-100/50 hover:bg-neutral-200/50 cursor-pointer"
+                    >
+                      <Save className="size-4 text-neutral-700" />
+                    </button>
+                  </div>
+                ) : (
+                  <div className="flex items-center gap-4">
+                    <span className="font-medium text-xs text-neutral-800">
+                      {invoiceData.symbol}
+                      {(invoiceData.receivedAmount ?? 0).toFixed(2)}
+                    </span>
+                    <button
+                      onClick={() => toggleEdit("receivedAmount")}
+                      className="p-2 hover:bg-neutral-100 cursor-pointer rounded"
+                    >
+                      <Edit3 size={14} className="text-neutral-600" />
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           <button onClick={handleAddClick} className={buttonClass}>
@@ -182,7 +219,7 @@ const ItemsEditor = ({
               type="text"
               value={itemForm.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
-              className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
+              className={`${editorInputClass} w-full`}
               placeholder="Enter item name"
             />
           </div>
@@ -193,7 +230,7 @@ const ItemsEditor = ({
             <textarea
               value={itemForm.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
-              className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
+              className={`${editorInputClass} w-full`}
               placeholder="Enter item description"
               rows="3"
             />
@@ -203,25 +240,22 @@ const ItemsEditor = ({
               <label className="block text-xs font-medium text-neutral-700 mb-1">
                 Quantity
               </label>
-              <input
-                type="number"
+              <NumberInput
                 value={itemForm.qty}
-                onChange={(e) => handleInputChange("qty", e.target.value)}
-                className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
-                min="1"
+                onChange={(value) => handleInputChange("qty", value)}
+                min={1}
+                className={numberInputClass}
               />
             </div>
             <div>
               <label className="block text-xs font-medium text-neutral-700 mb-1">
                 Price ({invoiceData.symbol})
               </label>
-              <input
-                type="number"
-                step="0.01"
+              <NumberInput
                 value={itemForm.price}
-                onChange={(e) => handleInputChange("price", e.target.value)}
-                className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
-                min="0"
+                onChange={(value) => handleInputChange("price", value)}
+                min={0}
+                className={numberInputClass}
               />
             </div>
           </div>
@@ -258,7 +292,7 @@ const ItemsEditor = ({
               type="text"
               value={itemForm.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
+              className={editorInputClass}
               placeholder="Enter item name"
             />
           </div>
@@ -269,7 +303,7 @@ const ItemsEditor = ({
             <textarea
               value={itemForm.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
+              className={editorInputClass}
               placeholder="Enter item description"
               rows="3"
             />
@@ -279,25 +313,22 @@ const ItemsEditor = ({
               <label className="block text-xs font-medium text-neutral-700 mb-1">
                 Quantity
               </label>
-              <input
-                type="number"
+              <NumberInput
                 value={itemForm.qty}
-                onChange={(e) => handleInputChange("qty", e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
-                min="1"
+                onChange={(value) => handleInputChange("qty", value)}
+                min={1}
+                className={numberInputClass}
               />
             </div>
             <div>
               <label className="block text-xs font-medium text-neutral-700 mb-1">
                 Price ({invoiceData.symbol})
               </label>
-              <input
-                type="number"
-                step="0.01"
+              <NumberInput
                 value={itemForm.price}
-                onChange={(e) => handleInputChange("price", e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
-                min="0"
+                onChange={(value) => handleInputChange("price", value)}
+                min={0}
+                className={numberInputClass}
               />
             </div>
           </div>

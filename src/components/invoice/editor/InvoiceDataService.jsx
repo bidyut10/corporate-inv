@@ -1,18 +1,7 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { currency, defaultInvoiceData } from "../data/data";
+import React, { useEffect, useState } from "react";
+import { currency, defaultInvoiceData, themes } from "../data/data";
 import { idbSet, idbGet, idbDelete } from "../utils/imageStore";
-
-const themes = [{ name: "Light", value: "light" }];
-
-const InvoiceContext = createContext();
-
-export const useInvoice = () => {
-  const context = useContext(InvoiceContext);
-  if (!context) {
-    throw new Error("useInvoice must be used within an InvoiceProvider");
-  }
-  return context;
-};
+import { InvoiceContext } from "./invoiceContext";
 
 export const InvoiceProvider = ({ children }) => {
   const [invoiceData, setInvoiceData] = useState(() => {
@@ -127,7 +116,11 @@ export const InvoiceProvider = ({ children }) => {
     newItems[index] = {
       ...newItems[index],
       [field]:
-        field === "price" || field === "qty" ? parseFloat(value) || 0 : value,
+        field === "price" || field === "qty"
+          ? typeof value === "number"
+            ? value
+            : parseFloat(value) || 0
+          : value,
     };
     setInvoiceData((prev) => ({ ...prev, items: newItems }));
   };
@@ -185,7 +178,8 @@ export const InvoiceProvider = ({ children }) => {
   };
 
   const updateTax = (value) => {
-    setInvoiceData((prev) => ({ ...prev, tax: parseFloat(value) || 0 }));
+    const tax = typeof value === "number" ? value : parseFloat(value) || 0;
+    setInvoiceData((prev) => ({ ...prev, tax: Math.max(0, tax) }));
   };
 
   const uploadLogo = (file) => {

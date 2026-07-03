@@ -1,19 +1,8 @@
-import React, { createContext, useContext, useEffect, useState } from "react";
-import { currency } from "../../invoice/data/data";
+import React, { useEffect, useState } from "react";
+import { currency, themes } from "../../invoice/data/data";
 import { defaultReceiptData } from "../data";
 import { idbSet, idbGet, idbDelete } from "../../invoice/utils/imageStore";
-
-const themes = [{ name: "Light", value: "light" }];
-
-const ReceiptContext = createContext();
-
-export const useReceipt = () => {
-  const context = useContext(ReceiptContext);
-  if (!context) {
-    throw new Error("useReceipt must be used within a ReceiptProvider");
-  }
-  return context;
-};
+import { ReceiptContext } from "./receiptContext";
 
 export const ReceiptProvider = ({ children }) => {
   const [receiptData, setReceiptData] = useState(() => {
@@ -113,7 +102,12 @@ export const ReceiptProvider = ({ children }) => {
     const newItems = [...receiptData.items];
     newItems[index] = {
       ...newItems[index],
-      [field]: field === "price" || field === "qty" ? parseFloat(value) || 0 : value,
+      [field]:
+        field === "price" || field === "qty"
+          ? typeof value === "number"
+            ? value
+            : parseFloat(value) || 0
+          : value,
     };
     setReceiptData((prev) => ({ ...prev, items: newItems }));
   };
@@ -159,11 +153,13 @@ export const ReceiptProvider = ({ children }) => {
   };
 
   const updateTax = (value) => {
-    setReceiptData((prev) => ({ ...prev, tax: parseFloat(value) || 0 }));
+    const tax = typeof value === "number" ? value : parseFloat(value) || 0;
+    setReceiptData((prev) => ({ ...prev, tax: Math.max(0, tax) }));
   };
 
   const updateReceivedAmount = (value) => {
-    setReceiptData((prev) => ({ ...prev, receivedAmount: parseFloat(value) || 0 }));
+    const receivedAmount = typeof value === "number" ? value : parseFloat(value) || 0;
+    setReceiptData((prev) => ({ ...prev, receivedAmount: Math.max(0, receivedAmount) }));
   };
 
   const uploadLogo = (file) => {

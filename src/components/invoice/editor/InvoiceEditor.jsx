@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useInvoice } from "./InvoiceDataService";
+import { useInvoice } from "./useInvoice";
 import ImageEditor from "./ImageEditor";
 import PaymentEditor from "./PaymentEditor";
 import FooterEditor from "./FooterEditor";
@@ -65,7 +65,7 @@ const InvoiceEditor = () => {
   });
 
   const inputClass =
-    "w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500";
+    "w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm bg-white transition-colors focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900/10";
   const labelClass = "block text-xs font-medium text-neutral-700 mb-1";
   const buttonClass =
     "flex justify-center items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded hover:bg-neutral-950 cursor-pointer w-full";
@@ -153,16 +153,32 @@ const InvoiceEditor = () => {
   };
 
   const handleDownloadPDF = async () => {
+    const errors = validateInvoiceData();
+    if (errors.length > 0) {
+      setDownloadState({ isLoading: false, success: false, error: errors.join("\n") });
+      return;
+    }
+
+    setDownloadState({ isLoading: true, success: false, error: null });
     try {
-      // Pass all required parameters including images
       await downloadInvoicePDF(
         invoiceData,
         "invoice",
         logoImage,
         signatureImage
       );
+      setDownloadState({ isLoading: false, success: true, error: null });
+      setTimeout(
+        () => setDownloadState({ isLoading: false, success: false, error: null }),
+        2000
+      );
     } catch (error) {
       console.error("Failed to generate PDF:", error);
+      setDownloadState({
+        isLoading: false,
+        success: false,
+        error: error.message || "Failed to generate PDF",
+      });
     }
   };
   return (

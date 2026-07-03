@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from "react";
-import { useReceipt } from "./ReceiptDataService";
+import { useReceipt } from "./useReceipt";
 import ImageEditor from "../../invoice/editor/ImageEditor";
 import PaymentEditor from "../../invoice/editor/PaymentEditor";
 import FooterEditor from "../../invoice/editor/FooterEditor";
@@ -61,8 +61,8 @@ const ReceiptEditor = () => {
   });
 
   const inputClass =
-    "w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500";
-  const labelClass = "text-[10px] text-neutral-500";
+    "w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm bg-white transition-colors focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900/10";
+  const labelClass = "block text-xs font-medium text-neutral-700 mb-1";
   const buttonClass =
     "flex justify-center items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded hover:bg-neutral-950 cursor-pointer w-full";
   const toggleSection = (section) => {
@@ -104,7 +104,47 @@ const ReceiptEditor = () => {
     );
   };
 
+  const validateReceiptData = useCallback(() => {
+    const errors = [];
+
+    if (!receiptData.receiptNumber?.trim()) {
+      errors.push("Receipt number is required");
+    }
+
+    if (!receiptData.billedBy?.name?.trim()) {
+      errors.push("Company name is required");
+    }
+
+    if (!receiptData.billedTo?.name?.trim()) {
+      errors.push("Client name is required");
+    }
+
+    if (!receiptData.items || receiptData.items.length === 0) {
+      errors.push("At least one item is required");
+    } else {
+      receiptData.items.forEach((item, index) => {
+        if (!item.name?.trim()) {
+          errors.push(`Item ${index + 1} name is required`);
+        }
+        if (!item.price || item.price <= 0) {
+          errors.push(`Item ${index + 1} must have a valid price`);
+        }
+        if (!item.qty || item.qty <= 0) {
+          errors.push(`Item ${index + 1} must have a valid quantity`);
+        }
+      });
+    }
+
+    return errors;
+  }, [receiptData]);
+
   const handleDownloadPDF = async () => {
+    const errors = validateReceiptData();
+    if (errors.length > 0) {
+      setDownloadState({ isLoading: false, success: false, error: errors.join("\n") });
+      return;
+    }
+
     setDownloadState({ isLoading: true, success: false, error: null });
     try {
       await downloadReceiptPDF(receiptData, "receipt", logoImage, signatureImage);
@@ -237,6 +277,7 @@ const ReceiptEditor = () => {
         invoiceData={receiptData}
         editingStates={editingStates}
         updateTax={updateTax}
+        updateReceivedAmount={updateReceivedAmount}
         buttonClass={buttonClass}
         updateItem={updateItem}
         addItem={addItem}

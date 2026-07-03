@@ -7,7 +7,7 @@ import ItemsSection from "../../components/invoice/pdf/ItemsSection";
 import CalculationSection from "../../components/invoice/pdf/CalculationSection";
 import BillingSection from "../../components/invoice/pdf/BillingSection";
 import InvoiceEditor from "../../components/invoice/editor/InvoiceEditor";
-import { useInvoice } from "../../components/invoice/editor/InvoiceDataService";
+import { useInvoice } from "./editor/useInvoice";
 import Sidebar from "../ui/Sidebar";
 import Navbar from "../ui/Navbar";
 import { EditIcon } from "lucide-react";

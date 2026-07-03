@@ -185,12 +185,15 @@ const LandingPage = ({ onNavigate }) => {
             </div>
 
             <div className="mt-16 grid grid-cols-2 gap-x-4 gap-y-10 border-t border-neutral-200 pt-12 md:mt-20 md:grid-cols-4 md:gap-y-0">
-              {FEATURES.map(({ icon: Icon, label }) => (
-                <div key={label} className="flex flex-col items-center text-center">
-                  <Icon className="h-8 w-8 text-neutral-800" strokeWidth={1.25} />
-                  <p className="mt-3 text-sm text-neutral-600">{label}</p>
-                </div>
-              ))}
+              {FEATURES.map((feature) => {
+                const FeatureIcon = feature.icon;
+                return (
+                  <div key={feature.label} className="flex flex-col items-center text-center">
+                    <FeatureIcon className="h-8 w-8 text-neutral-800" strokeWidth={1.25} />
+                    <p className="mt-3 text-sm text-neutral-600">{feature.label}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>

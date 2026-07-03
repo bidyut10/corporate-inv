@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import ReceiptEditor from "./editor/ReceiptEditor";
-import { useReceipt } from "./editor/ReceiptDataService";
+import { useReceipt } from "./editor/useReceipt";
 import Navbar from "../ui/Navbar";
 import Sidebar from "../ui/Sidebar";
 import { EditIcon } from "lucide-react";
