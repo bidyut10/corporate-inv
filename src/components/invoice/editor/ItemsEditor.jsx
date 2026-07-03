@@ -134,11 +134,11 @@ const ItemsEditor = ({
                     step="0.01"
                     value={invoiceData.tax}
                     onChange={(e) => updateTax(e.target.value)}
-                    className="w-24 px-2 py-1 bg-white border border-neutral-300 rounded focus:outline-none focus:border-orange-500"
+                    className="w-24 px-2 py-1 bg-white border border-neutral-300 rounded focus:outline-none focus:border-cyan-500"
                   />
                   <button
                     onClick={() => toggleEdit("tax")}
-                    className="p-2 rounded bg-neutral-100/50 hover:bg-orange-100/50 cursor-pointer"
+                    className="p-2 rounded bg-neutral-100/50 hover:bg-cyan-100/50 cursor-pointer"
                   >
                     <Save className="size-4 text-neutral-700" />
                   </button>
@@ -182,7 +182,7 @@ const ItemsEditor = ({
               type="text"
               value={itemForm.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
-              className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500"
+              className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
               placeholder="Enter item name"
             />
           </div>
@@ -193,7 +193,7 @@ const ItemsEditor = ({
             <textarea
               value={itemForm.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
-              className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500"
+              className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
               placeholder="Enter item description"
               rows="3"
             />
@@ -207,7 +207,7 @@ const ItemsEditor = ({
                 type="number"
                 value={itemForm.qty}
                 onChange={(e) => handleInputChange("qty", e.target.value)}
-                className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500"
+                className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
                 min="1"
               />
             </div>
@@ -220,7 +220,7 @@ const ItemsEditor = ({
                 step="0.01"
                 value={itemForm.price}
                 onChange={(e) => handleInputChange("price", e.target.value)}
-                className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500"
+                className="w-full px-3 py-2 border text-xs border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
                 min="0"
               />
             </div>
@@ -258,7 +258,7 @@ const ItemsEditor = ({
               type="text"
               value={itemForm.name}
               onChange={(e) => handleInputChange("name", e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
               placeholder="Enter item name"
             />
           </div>
@@ -269,7 +269,7 @@ const ItemsEditor = ({
             <textarea
               value={itemForm.description}
               onChange={(e) => handleInputChange("description", e.target.value)}
-              className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500"
+              className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
               placeholder="Enter item description"
               rows="3"
             />
@@ -283,7 +283,7 @@ const ItemsEditor = ({
                 type="number"
                 value={itemForm.qty}
                 onChange={(e) => handleInputChange("qty", e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
                 min="1"
               />
             </div>
@@ -296,7 +296,7 @@ const ItemsEditor = ({
                 step="0.01"
                 value={itemForm.price}
                 onChange={(e) => handleInputChange("price", e.target.value)}
-                className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500"
+                className="w-full px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500"
                 min="0"
               />
             </div>

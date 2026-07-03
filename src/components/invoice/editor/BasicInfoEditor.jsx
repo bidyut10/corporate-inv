@@ -167,9 +167,9 @@ const BasicInfoEditor = ({
                       {editingField === index ? (
                         <button
                           onClick={handleSaveEdit}
-                          className="p-2 hover:bg-orange-100 rounded transition-colors"
+                          className="p-2 hover:bg-cyan-100 rounded transition-colors"
                         >
-                          <Save size={16} className="text-orange-600" />
+                          <Save size={16} className="text-cyan-600" />
                         </button>
                       ) : (
                         <button

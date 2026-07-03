@@ -61,7 +61,7 @@ const ReceiptEditor = () => {
   });
 
   const inputClass =
-    "w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500";
+    "w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500";
   const labelClass = "text-[10px] text-neutral-500";
   const buttonClass =
     "flex justify-center items-center gap-2 px-4 py-2 bg-neutral-900 text-white rounded hover:bg-neutral-950 cursor-pointer w-full";
@@ -122,14 +122,14 @@ const ReceiptEditor = () => {
           <button
             onClick={handleDownloadPDF}
             disabled={downloadState.isLoading}
-            className={`bg-gradient-to-br from-orange-400 to-orange-500 pl-1.5 pr-2 py-1.5 rounded-lg border-2 border-orange-400 relative flex justify-center items-center overflow-hidden text-white gap-2 cursor-pointer transition-all duration-200 min-w-[140px] ${
+            className={`bg-gradient-to-br from-cyan-400 to-cyan-500 pl-1.5 pr-2 py-1.5 rounded-lg border-2 border-cyan-400 relative flex justify-center items-center overflow-hidden text-white gap-2 cursor-pointer transition-all duration-200 min-w-[140px] ${
               downloadState.isLoading
                 ? "opacity-75 cursor-not-allowed"
                 : downloadState.success
                 ? "from-green-400 to-green-500 border-green-400"
                 : downloadState.error
                 ? "from-red-400 to-red-500 border-red-400"
-                : "hover:from-orange-500 hover:to-orange-600"
+                : "hover:from-cyan-500 hover:to-cyan-600"
             }`}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>

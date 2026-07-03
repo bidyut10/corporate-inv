@@ -132,8 +132,8 @@ const ReceiptBasicInfoEditor = ({
                     )}
                     <div className="flex items-center gap-2">
                       {editingField === index ? (
-                        <button onClick={handleSaveEdit} className="p-2 hover:bg-orange-100 rounded transition-colors">
-                          <Save size={16} className="text-orange-600" />
+                        <button onClick={handleSaveEdit} className="p-2 hover:bg-cyan-100 rounded transition-colors">
+                          <Save size={16} className="text-cyan-600" />
                         </button>
                       ) : (
                         <button onClick={() => setEditingField(index)} className="p-2 hover:bg-neutral-200 rounded transition-colors">

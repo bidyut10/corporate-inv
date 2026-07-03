@@ -16,7 +16,7 @@ const Dropdown = ({
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
-        className="w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-orange-500 flex items-center justify-between bg-white cursor-pointer"
+        className="w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm focus:outline-none focus:border-cyan-500 flex items-center justify-between bg-white cursor-pointer"
       >
         <span className="truncate">
           {value
