@@ -142,12 +142,12 @@ const LandingPage = ({ onNavigate }) => {
   return (
     <div className="min-h-screen bg-white text-neutral-600">
       <section className="relative bg-white">
-        <div className="pointer-events-none absolute inset-x-0 top-0 w-full bg-white">
-          <div className="relative overflow-hidden bg-white">
+        <div className="pointer-events-none absolute inset-x-0 top-0 w-full max-md:h-dvh bg-white">
+          <div className="relative overflow-hidden bg-white max-md:h-full">
             <img
               src={wallpaper3}
               alt=""
-              className="block w-full scale-[1.03] h-auto"
+              className="block w-full scale-[1.03] max-md:h-full max-md:object-cover max-md:object-top md:h-auto"
               style={WALLPAPER_MASK}
             />
             <div

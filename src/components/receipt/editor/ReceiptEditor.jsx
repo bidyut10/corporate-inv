@@ -8,7 +8,7 @@ import ReceiptBasicInfoEditor from "./ReceiptBasicInfoEditor";
 import CompanyEditor from "../../invoice/editor/CompanyEditor";
 import ClientEditor from "../../invoice/editor/ClientEditor";
 import ItemsEditor from "../../invoice/editor/ItemsEditor";
-import { ArrowDownToLine, Loader2, CheckCircle, XCircle } from "lucide-react";
+import { ArrowDownToLine, Loader, CheckCircle, XCircle } from "lucide-react";
 import { downloadReceiptPDF } from "../utils/index";
 
 const ReceiptEditor = () => {
@@ -122,19 +122,19 @@ const ReceiptEditor = () => {
           <button
             onClick={handleDownloadPDF}
             disabled={downloadState.isLoading}
-            className={`bg-gradient-to-br from-cyan-400 to-cyan-500 pl-1.5 pr-2 py-1.5 rounded-lg border-2 border-cyan-400 relative flex justify-center items-center overflow-hidden text-white gap-2 cursor-pointer transition-all duration-200 min-w-[140px] ${
+            className={`bg-gradient-to-br from-blue-600 to-blue-700 pl-1.5 pr-2 py-1.5 rounded-sm relative flex justify-center items-center overflow-hidden text-white gap-2 cursor-pointer transition-all duration-200 min-w-[140px] ${
               downloadState.isLoading
                 ? "opacity-75 cursor-not-allowed"
                 : downloadState.success
-                ? "from-green-400 to-green-500 border-green-400"
+                ? "from-green-400 to-green-500"
                 : downloadState.error
-                ? "from-red-400 to-red-500 border-red-400"
-                : "hover:from-cyan-500 hover:to-cyan-600"
+                ? "from-red-400 to-red-500"
+                : "hover:from-blue-500 hover:to-blue-600"
             }`}
           >
             <div className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"></div>
             {downloadState.isLoading ? (
-              <Loader2 size={14} className="animate-spin" />
+              <Loader size={14} className="animate-spin" />
             ) : downloadState.success ? (
               <CheckCircle size={14} />
             ) : downloadState.error ? (

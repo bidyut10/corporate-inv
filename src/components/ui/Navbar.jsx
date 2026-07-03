@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Menu, X, Github } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import Logo from "./Logo";
 
 const Navbar = ({
@@ -38,71 +38,38 @@ const Navbar = ({
   return (
     <nav className="fixed top-0 left-0 right-0 border-b w-full border-neutral-100 bg-white text-neutral-800 transition-all duration-300 ease-in-out selection:bg-neutral-200 selection:text-neutral-950 dark:border-[#1c1c1c] dark:bg-[#181818] z-50">
       <div className="mx-auto flex h-16 max-w-full bg-white items-center justify-between">
-        <div
-          className={`flex items-center justify-between gap-4 ${
-            isMobile ? "w-fit" : "w-[17%]"
-          } border-x-none h-full px-4 md:px-6 xl:border-x xl:border-neutral-100`}
-        >
-          {isMobile ? (
-            <>
-              <button
-                className="flex items-center w-8 h-8 p-2 cursor-pointer text-xs text-neutral-600 bg-neutral-50/50 rounded-md transition-all duration-200 group border border-transparent hover:border-neutral-200"
-                onClick={isMenuOpen ? handleMenuClose : handleMenuToggle}
-                type="button"
-                style={{ touchAction: "manipulation" }}
-                title={isMenuOpen ? "Close Menu" : "Open Menu"}
-              >
-                {isMenuOpen ? (
-                  <X
-                    className="pointer-events-none text-neutral-700 group-hover:text-neutral-700 group-hover:fill-neutral-600 transition-colors duration-300 ease-in-out"
-                    strokeWidth={1.8}
-                  />
-                ) : (
-                  <Menu
-                    className="pointer-events-none text-neutral-700 group-hover:text-neutral-700 group-hover:fill-neutral-600 transition-colors duration-300 ease-in-out"
-                    strokeWidth={1.8}
-                  />
-                )}
-              </button>
-              <div className="flex items-center justify-center gap-2">
-                <Logo className="h-8 md:h-12"/>
-              </div>
-            </>
-          ) : (
-            <>
-              <div className="flex items-center justify-center gap-2">
-                <Logo className="h-10" />
-              </div>
-            </>
-          )}
-        </div>
-
-        <div
-          className={`flex items-center justify-between gap-4 h-full px-4 md:px-6`}
-        >
-          <div className={`flex items-center justify-end gap-4`}>
+        {isMobile ? (
+          <div className="flex w-full items-center justify-between px-4 md:px-6">
+            <Logo className="h-8 md:h-12" />
             <button
-              className="flex items-center font-mono text-xs cursor-pointer text-neutral-700 border-b border-neutral-700 hover:text-neutral-900 transition-colors duration-300 ease-in-out"
-              onClick={() =>
-                window.open("https://github.com/bidyut10", "_blank")
-              }
+              className="flex items-center group"
+              onClick={isMenuOpen ? handleMenuClose : handleMenuToggle}
               type="button"
               style={{ touchAction: "manipulation" }}
+              title={isMenuOpen ? "Close Menu" : "Open Menu"}
             >
-              <h1>Github</h1>
-            </button>
-            <button
-              className="flex items-center font-mono text-xs cursor-pointer text-neutral-700 border-b border-neutral-700 hover:text-neutral-900 transition-colors duration-300 ease-in-out"
-              onClick={() =>
-                window.open("https://x.com/BidyutKundu12", "_blank")
-              }
-              type="button"
-              style={{ touchAction: "manipulation" }}
-            >
-              <h1>Twitter</h1>
+              {isMenuOpen ? (
+                <X
+                  className="pointer-events-none text-neutral-800 group-hover:text-neutral-950 transition-colors duration-300 ease-in-out"
+                  strokeWidth={1.8}
+                  size={24}
+                />
+              ) : (
+                <Menu
+                  className="pointer-events-none text-neutral-800 group-hover:text-neutral-950 transition-colors duration-240 ease-in-out"
+                  strokeWidth={1.8}
+                  size={24}
+                />
+              )}
             </button>
           </div>
-        </div>
+        ) : (
+          <>
+            <div className="flex w-[17%] items-center border-x-none h-full px-4 md:px-6 xl:border-x xl:border-neutral-100">
+              <Logo className="h-10" />
+            </div>
+          </>
+        )}
       </div>
     </nav>
   );
