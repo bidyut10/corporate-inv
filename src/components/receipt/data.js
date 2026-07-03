@@ -3,6 +3,7 @@ export const defaultReceiptData = {
   receiptDate: new Date().toISOString().slice(0, 10),
   currency: "USD",
   symbol: "$",
+  theme: "light",
   billedBy: {
     name: "Opensource UI",
     contact: "billing@corpai.com",

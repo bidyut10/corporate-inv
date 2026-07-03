@@ -15,6 +15,11 @@ import {
   XCircle,
 } from "lucide-react";
 import { downloadInvoicePDF } from "../utils/index";
+import {
+  renderCurrencyOption,
+  renderSelectedCurrency,
+} from "../../common/currencyDisplay";
+import { isDueDateValid, isValidDateValue } from "../../common/dateUtils";
 
 const InvoiceEditor = () => {
   const {
@@ -109,6 +114,16 @@ const InvoiceEditor = () => {
       errors.push("Client name is required");
     }
 
+    if (!isValidDateValue(invoiceData.issueDate)) {
+      errors.push("Issue date is required");
+    }
+
+    if (!isValidDateValue(invoiceData.dueDate)) {
+      errors.push("Due date is required");
+    } else if (!isDueDateValid(invoiceData.issueDate, invoiceData.dueDate)) {
+      errors.push("Due date must be on or after issue date");
+    }
+
     if (!invoiceData.items || invoiceData.items.length === 0) {
       errors.push("At least one item is required");
     } else {
@@ -128,28 +143,21 @@ const InvoiceEditor = () => {
     return errors;
   }, [invoiceData]);
 
-  const renderCurrencyOption = (country) => (
-    <div className="flex items-center gap-2">
-      <span className="bg-neutral-100 px-2 py-1.5 rounded-sm">
-        {country.flag}
-      </span>
-      <span>
-        {country.code} - {country.currency}
-      </span>
+  const renderCurrencyOptionItem = (country) => renderCurrencyOption(country);
+
+  const renderSelectedCurrencyItem = (currencyCode) =>
+    renderSelectedCurrency(currencyCode, currency.countries);
+
+  const renderThemeOption = (theme) => (
+    <div className="flex items-center gap-2.5">
+      <span className={`h-3.5 w-3.5 shrink-0 rounded-full border ${theme.swatch}`} />
+      <span>{theme.name}</span>
     </div>
   );
 
-  const renderSelectedCurrency = (currencyCode) => {
-    const country = currency.countries.find((c) => c.code === currencyCode);
-    return country ? (
-      <div className="flex items-center gap-2">
-        <span>
-          {country.name} ( {country.code} {country.symbol} )
-        </span>
-      </div>
-    ) : (
-      currencyCode
-    );
+  const renderSelectedTheme = (themeValue) => {
+    const theme = themes.find((t) => t.value === themeValue);
+    return theme ? renderThemeOption(theme) : themeValue;
   };
 
   const handleDownloadPDF = async () => {
@@ -252,8 +260,10 @@ const InvoiceEditor = () => {
         updateCurrency={updateCurrency}
         themes={themes}
         buttonClass={buttonClass}
-        renderCurrencyOption={renderCurrencyOption}
-        renderSelectedCurrency={renderSelectedCurrency}
+        renderCurrencyOption={renderCurrencyOptionItem}
+        renderSelectedCurrency={renderSelectedCurrencyItem}
+        renderThemeOption={renderThemeOption}
+        renderSelectedTheme={renderSelectedTheme}
         updateTheme={updateTheme}
         addCustomField={addCustomField}
         updateCustomField={updateCustomField}

@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Plus, Trash2, Edit3, Save, X } from "lucide-react";
 import Accordion from "../../common/Accordion";
 import Dropdown from "../../common/Dropdown";
+import DateField from "../../common/DateField";
+import { isDueDateValid } from "../../common/dateUtils";
 import { primaryButtonClass, secondaryButtonClass } from "../data/data";
 
 const BasicInfoEditor = ({
@@ -18,6 +20,8 @@ const BasicInfoEditor = ({
   buttonClass,
   renderCurrencyOption,
   renderSelectedCurrency,
+  renderThemeOption,
+  renderSelectedTheme,
   updateTheme,
   addCustomField,
   updateCustomField,
@@ -42,6 +46,20 @@ const BasicInfoEditor = ({
   const handleSaveEdit = () => {
     setEditingField(null);
   };
+
+  const handleIssueDateChange = (value) => {
+    updateBasicInfo("issueDate", value);
+    if (invoiceData.dueDate && value && invoiceData.dueDate < value) {
+      updateBasicInfo("dueDate", value);
+    }
+  };
+
+  const issueDateError = !invoiceData.issueDate ? "Issue date is required" : "";
+  const dueDateError = !invoiceData.dueDate
+    ? "Due date is required"
+    : !isDueDateValid(invoiceData.issueDate, invoiceData.dueDate)
+      ? "Due date must be on or after issue date"
+      : "";
 
   return (
     <Accordion
@@ -78,20 +96,21 @@ const BasicInfoEditor = ({
             </div>
             <div>
               <label className={labelClass}>Issue Date</label>
-              <input
-                type="date"
+              <DateField
                 value={invoiceData.issueDate}
-                onChange={(e) => updateBasicInfo("issueDate", e.target.value)}
-                className={inputClass + " cursor-pointer"}
+                onChange={handleIssueDateChange}
+                placeholder="Select issue date"
+                error={issueDateError}
               />
             </div>
             <div>
               <label className={labelClass}>Due Date</label>
-              <input
-                type="date"
+              <DateField
                 value={invoiceData.dueDate}
-                onChange={(e) => updateBasicInfo("dueDate", e.target.value)}
-                className={inputClass + " cursor-pointer"}
+                onChange={(value) => updateBasicInfo("dueDate", value)}
+                min={invoiceData.issueDate || undefined}
+                placeholder="Select due date"
+                error={dueDateError}
               />
             </div>
             <div>
@@ -112,10 +131,8 @@ const BasicInfoEditor = ({
                 onChange={(theme) => updateTheme(theme.value)}
                 options={themes}
                 placeholder="Select Theme"
-                renderOption={(theme) => theme.name}
-                renderSelected={(themeValue) =>
-                  themes.find((t) => t.value === themeValue)?.name || themeValue
-                }
+                renderOption={renderThemeOption}
+                renderSelected={renderSelectedTheme}
               />
             </div>
           </div>

@@ -1,15 +1,15 @@
 import React from "react";
+import { usePdfTheme } from "./usePdfTheme";
 
 const ThankyouSection = ({ title, text }) => {
-  if (!title && !text) {
-    return;
-  }
+  const t = usePdfTheme();
+
+  if (!title && !text) return null;
+
   return (
-    <div className="w-full border-y bg-neutral-50/50 border-dashed border-neutral-100 py-3">
-      <h3 className="text-neutral-800 text-center font-medium text-xs mb-1">
-        {title}
-      </h3>
-      <h3 className="text-neutral-600 text-center text-xs">{text}</h3>
+    <div className={`w-full border-y border-dashed ${t.border} ${t.notesBg} py-3`}>
+      <h3 className={`text-center font-medium text-xs mb-1 ${t.heading}`}>{title}</h3>
+      <h3 className={`text-center text-xs ${t.body}`}>{text}</h3>
     </div>
   );
 };

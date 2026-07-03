@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { currency, defaultInvoiceData, themes } from "../data/data";
+import { normalizeTheme } from "../data/pdfThemes";
 import { idbSet, idbGet, idbDelete } from "../utils/imageStore";
 import { InvoiceContext } from "./invoiceContext";
 
@@ -49,7 +50,7 @@ export const InvoiceProvider = ({ children }) => {
   };
 
   const updateTheme = (theme) => {
-    setInvoiceData((prev) => ({ ...prev, theme }));
+    setInvoiceData((prev) => ({ ...prev, theme: normalizeTheme(theme) }));
   };
 
   const updateBilledBy = (field, value) => {

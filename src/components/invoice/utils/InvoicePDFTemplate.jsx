@@ -1,484 +1,9 @@
 import React from "react";
-import {
-  Document,
-  Page,
-  Text,
-  View,
-  StyleSheet,
-  Image,
-} from "@react-pdf/renderer";
-
-// Create styles that exactly match your UI design
-const styles = StyleSheet.create({
-  page: {
-    flexDirection: "column",
-    backgroundColor: "#ffffff",
-    padding: 24,
-    fontFamily: "Helvetica",
-    fontSize: 14,
-    lineHeight: 1.4,
-    color: "#404040",
-  },
-
-  // Invoice Title - matches text-xl font-normal uppercase text-neutral-800
-  invoiceTitle: {
-    fontSize: 20,
-    fontWeight: "normal",
-    textTransform: "uppercase",
-    color: "#262626",
-    marginBottom: 16,
-    textAlign: "left",
-  },
-
-  // Header Section - matches border-y border-dashed border-neutral-100
-  headerSection: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#f5f5f5",
-    paddingTop: 12,
-    paddingBottom: 4,
-    position: "relative",
-  },
-
-  // Add vertical divider for header
-  headerDivider: {
-    position: "absolute",
-    left: "50%",
-    top: 0,
-    bottom: 0,
-    borderLeftWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#f5f5f5",
-  },
-
-  headerLeft: {
-    width: "48%",
-    paddingRight: 6,
-    fontSize: 11,
-  },
-
-  headerRight: {
-    width: "48%",
-    alignItems: "flex-end",
-    justifyContent: "center",
-    paddingLeft: 6,
-  },
-
-  headerRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 1,
-  },
-
-  headerLabel: {
-    color: "#000000",
-    fontSize: 11,
-  },
-
-  headerValue: {
-    color: "#404040",
-    fontSize: 11,
-    marginLeft: 8,
-  },
-
-  logo: {
-    maxHeight: 60,
-    // maxWidth: 120,
-    objectFit: "contain",
-  },
-
-  // Billing Section - matches relative flex justify-between items-start border-b border-dashed border-neutral-100
-  billingSection: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    borderBottomWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#f5f5f5",
-    marginBottom: 16,
-    paddingTop: 12,
-    paddingBottom: 4,
-    position: "relative",
-  },
-
-  // Add vertical divider for billing
-  billingDivider: {
-    position: "absolute",
-    left: "50%",
-    top: 0,
-    bottom: 0,
-    borderLeftWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#f5f5f5",
-  },
-
-  billingColumn: {
-    width: "48%",
-    // paddingHorizontal: 12,
-  },
-
-  billingHeader: {
-    fontSize: 11,
-    fontWeight: 500,
-    color: "#262626",
-    marginBottom: 4,
-  },
-
-  billingText: {
-    fontSize: 11,
-    color: "#525252",
-    lineHeight: 1.5,
-    marginBottom: 4,
-  },
-
-  customFieldsContainer: {
-    marginTop: 8,
-    paddingTop: 8,
-    borderTopWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#fafafa",
-  },
-
-  customField: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    marginVertical: 1,
-  },
-
-  customFieldLabel: {
-    fontSize: 11,
-    fontWeight: 500,
-    color: "#404040",
-  },
-
-  customFieldValue: {
-    fontSize: 11,
-    color: "#404040",
-    marginLeft: 8,
-  },
-
-  // Items Section Header - matches grid-cols-12 bg-neutral-50/50 text-neutral-800
-  itemsContainer: {
-    // marginBottom: 16,
-  },
-
-  itemsHeader: {
-    flexDirection: "row",
-    backgroundColor: "#fafafa",
-    fontSize: 11,
-    fontWeight: 500,
-    paddingTop: 6,
-    paddingHorizontal: 8,
-    color: "#262626",
-    marginBottom: 2,
-    borderRadius: 4,
-  },
-
-  itemsHeaderNo: {
-    width: "8%",
-    textAlign: "left",
-  },
-
-  itemsHeaderItem: {
-    width: "40%",
-    // paddingHorizontal: 4,
-  },
-
-  itemsHeaderQty: {
-    width: "8%",
-    textAlign: "center",
-  },
-
-  itemsHeaderPrice: {
-    width: "22%",
-    textAlign: "right",
-  },
-
-  itemsHeaderTotal: {
-    width: "22%",
-    textAlign: "right",
-  },
-
-  itemRow: {
-    flexDirection: "row",
-    borderBottomWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#f5f5f5",
-    paddingVertical: 8,
-    paddingHorizontal: 8,
-    alignItems: "flex-start",
-    // minHeight: 40,
-  },
-
-  itemNo: {
-    width: "8%",
-    fontSize: 10,
-    color: "#525252",
-    paddingTop: 2,
-  },
-
-  itemDetails: {
-    width: "40%",
-    paddingHorizontal: 2,
-  },
-
-  itemName: {
-    fontSize: 11,
-    fontWeight: 500,
-    color: "#525252",
-    marginBottom: 2,
-  },
-
-  itemDescription: {
-    fontSize: 10,
-    color: "#525252",
-    lineHeight: 1,
-  },
-
-  itemQty: {
-    width: "8%",
-    fontSize: 10,
-    color: "#525252",
-    textAlign: "center",
-    paddingTop: 2,
-  },
-
-  itemPrice: {
-    width: "22%",
-    fontSize: 10,
-    color: "#525252",
-    textAlign: "right",
-    paddingTop: 2,
-  },
-
-  itemTotal: {
-    width: "22%",
-    fontSize: 10,
-    color: "#525252",
-    textAlign: "right",
-    paddingTop: 2,
-  },
-
-  // Calculation Section - matches flex justify-end items-center w-full mb-4
-  calculationSection: {
-    flexDirection: "row",
-    justifyContent: "flex-end",
-    alignItems: "center",
-    width: "100%",
-    marginBottom: 12,
-    // marginTop: 8,
-  },
-
-  calculationContainer: {
-    width: "40%",
-  },
-
-  calculationRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 4,
-    borderBottomWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#fafafa",
-  },
-
-  calculationLabel: {
-    fontSize: 11,
-    color: "#404040",
-  },
-
-  calculationValue: {
-    fontSize: 11,
-    color: "#404040",
-    paddingRight: 8,
-  },
-
-  totalRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingVertical: 8,
-    borderBottomWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#fafafa",
-  },
-
-  totalLabel: {
-    fontSize: 14,
-    fontWeight: 500,
-    color: "#404040",
-  },
-
-  totalValue: {
-    fontSize: 14,
-    fontWeight: 500,
-    color: "#404040",
-    paddingRight: 8,
-  },
-
-  // Payment Section - matches flex justify-start items-center w-full border-y border-dashed border-neutral-100
-  paymentSection: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "stretch",
-    width: "100%",
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#f5f5f5",
-    marginBottom: 16,
-    marginTop: 4,
-    position: "relative",
-    // minHeight: 120,
-  },
-
-  // Add vertical divider for payment section
-  paymentDivider: {
-    position: "absolute",
-    left: "50%",
-    top: 0,
-    bottom: 0,
-    borderLeftWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#f5f5f5",
-  },
-
-  paymentLeft: {
-    width: "48%",
-    paddingTop: 12,
-    paddingBottom: 4,
-    paddingRight: 6,
-  },
-
-  paymentRight: {
-    width: "48%",
-    paddingTop: 12,
-    paddingBottom: 4,
-    paddingLeft: 12,
-    alignItems: "center",
-    justifyContent: "center",
-    flexDirection: "column",
-  },
-
-  paymentTitle: {
-    fontSize: 11,
-    color: "#262626",
-    fontWeight: 500,
-    marginBottom: 6,
-  },
-
-  paymentRow: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    // marginBottom: 4,
-    paddingVertical: 1,
-  },
-
-  paymentLabel: {
-    fontSize: 11,
-    color: "#525252",
-  },
-
-  paymentValue: {
-    fontSize: 11,
-    color: "#525252",
-  },
-
-  signatureContainer: {
-    width: "100%",
-    height: 60,
-    paddingTop: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    flex: 1,
-  },
-
-  signature: {
-    maxHeight: 40,
-    maxWidth: 100,
-    objectFit: "contain",
-  },
-
-  signatureTextContainer: {
-    width: "100%",
-    height: 24,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-
-  signatureText: {
-    fontSize: 10,
-    color: "#525252",
-    backgroundColor: "#fafafa",
-    paddingVertical: 4,
-    paddingHorizontal: 8,
-    textAlign: "center",
-    width: "100%",
-  },
-
-  // Notes/Terms Section - matches w-full border-y bg-neutral-50/50 border-dashed border-neutral-100
-  notesSection: {
-    width: "100%",
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#f5f5f5",
-    backgroundColor: "#fafafa",
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    marginBottom: 16,
-    // marginTop: 8,
-  },
-
-  notesTitle: {
-    color: "#262626",
-    fontWeight: 500,
-    fontSize: 11,
-    marginBottom: 2,
-  },
-
-  notesText: {
-    color: "#525252",
-    fontSize: 10,
-    lineHeight: 1,
-  },
-
-  // Thank You Section - matches w-full border-y bg-neutral-50/50 border-dashed border-neutral-100 text-center
-  thankYouSection: {
-    width: "100%",
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderStyle: "dashed",
-    borderColor: "#f5f5f5",
-    backgroundColor: "#fafafa",
-    paddingVertical: 12,
-    paddingHorizontal: 12,
-    textAlign: "center",
-    // marginTop: 8,
-  },
-
-  thankYouTitle: {
-    color: "#262626",
-    fontWeight: 500,
-    fontSize: 11,
-    marginBottom: 2,
-    textAlign: "center",
-  },
-
-  thankYouText: {
-    color: "#525252",
-    fontSize: 10,
-    textAlign: "center",
-  },
-});
+import { Document, Page, Text, View, Image } from "@react-pdf/renderer";
+import { createPdfStyles } from "./pdfStylesFactory";
 
 const InvoicePDFTemplate = ({ data }) => {
-  // Calculate totals
+  const styles = createPdfStyles(data.theme);
   const subtotal =
     data.items?.reduce(
       (sum, item) => sum + (item.qty || 0) * (item.price || 0),
@@ -486,8 +11,6 @@ const InvoicePDFTemplate = ({ data }) => {
     ) || 0;
   const tax = data.tax || 0;
   const total = subtotal + tax;
-
-  // Transform payment data
   const payment =
     data.payment?.map((item) => ({
       [item.label]: item.value,
@@ -496,14 +19,12 @@ const InvoicePDFTemplate = ({ data }) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Invoice Title */}
         <View>
           <Text style={styles.invoiceTitle}>
             Invoice {data.invoiceNumber || ""}
           </Text>
         </View>
 
-        {/* Invoice Header Section */}
         <View style={styles.headerSection}>
           <View style={styles.headerDivider} />
           <View style={styles.headerLeft}>
@@ -523,8 +44,6 @@ const InvoicePDFTemplate = ({ data }) => {
               <Text style={styles.headerLabel}>Currency</Text>
               <Text style={styles.headerValue}>{data.currency || ""}</Text>
             </View>
-
-            {/* Custom Fields */}
             {data.customFields?.basic?.map((field, index) => (
               <View key={index} style={styles.headerRow}>
                 <Text style={styles.headerLabel}>{field.label}</Text>
@@ -532,69 +51,48 @@ const InvoicePDFTemplate = ({ data }) => {
               </View>
             ))}
           </View>
-
           <View style={styles.headerRight}>
-            {data.logoImage && (
-              <Image style={styles.logo} src={data.logoImage} />
-            )}
+            {data.logoImage && <Image style={styles.logo} src={data.logoImage} />}
           </View>
         </View>
 
-        {/* Billing Section */}
         <View style={styles.billingSection}>
           <View style={styles.billingDivider} />
           <View style={styles.billingColumn}>
             <Text style={styles.billingHeader}>From</Text>
             <Text style={styles.billingText}>{data.billedBy?.name || ""}</Text>
-            <Text style={styles.billingText}>
-              {data.billedBy?.contact || ""}
-            </Text>
-            <Text style={styles.billingText}>
-              {data.billedBy?.address || ""}
-            </Text>
-
-            {/* Custom Fields for Company */}
-            {data.customFields?.company &&
-              data.customFields.company.length > 0 && (
-                <View style={styles.customFieldsContainer}>
-                  {data.customFields.company.map((field, index) => (
-                    <View key={index} style={styles.customField}>
-                      <Text style={styles.customFieldLabel}>{field.label}</Text>
-                      <Text style={styles.customFieldValue}>{field.value}</Text>
-                    </View>
-                  ))}
-                </View>
-              )}
+            <Text style={styles.billingText}>{data.billedBy?.contact || ""}</Text>
+            <Text style={styles.billingText}>{data.billedBy?.address || ""}</Text>
+            {data.customFields?.company?.length > 0 && (
+              <View style={styles.customFieldsContainer}>
+                {data.customFields.company.map((field, index) => (
+                  <View key={index} style={styles.customField}>
+                    <Text style={styles.customFieldLabel}>{field.label}</Text>
+                    <Text style={styles.customFieldValue}>{field.value}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
-
           <View style={styles.billingColumn}>
             <Text style={styles.billingHeader}>To</Text>
             <Text style={styles.billingText}>{data.billedTo?.name || ""}</Text>
-            <Text style={styles.billingText}>
-              {data.billedTo?.contact || ""}
-            </Text>
-            <Text style={styles.billingText}>
-              {data.billedTo?.address || ""}
-            </Text>
-
-            {/* Custom Fields for Client */}
-            {data.customFields?.client &&
-              data.customFields.client.length > 0 && (
-                <View style={styles.customFieldsContainer}>
-                  {data.customFields.client.map((field, index) => (
-                    <View key={index} style={styles.customField}>
-                      <Text style={styles.customFieldLabel}>{field.label}</Text>
-                      <Text style={styles.customFieldValue}>{field.value}</Text>
-                    </View>
-                  ))}
-                </View>
-              )}
+            <Text style={styles.billingText}>{data.billedTo?.contact || ""}</Text>
+            <Text style={styles.billingText}>{data.billedTo?.address || ""}</Text>
+            {data.customFields?.client?.length > 0 && (
+              <View style={styles.customFieldsContainer}>
+                {data.customFields.client.map((field, index) => (
+                  <View key={index} style={styles.customField}>
+                    <Text style={styles.customFieldLabel}>{field.label}</Text>
+                    <Text style={styles.customFieldValue}>{field.value}</Text>
+                  </View>
+                ))}
+              </View>
+            )}
           </View>
         </View>
 
-        {/* Items Section */}
         <View style={styles.itemsContainer}>
-          {/* Items Header */}
           <View style={styles.itemsHeader}>
             <Text style={styles.itemsHeaderNo}>No.</Text>
             <Text style={styles.itemsHeaderItem}>Item</Text>
@@ -602,30 +100,24 @@ const InvoicePDFTemplate = ({ data }) => {
             <Text style={styles.itemsHeaderPrice}>Price</Text>
             <Text style={styles.itemsHeaderTotal}>Total</Text>
           </View>
-
-          {/* Items Rows */}
           {data.items?.map((item, index) => (
             <View key={index} style={styles.itemRow}>
               <Text style={styles.itemNo}>{index + 1}.</Text>
               <View style={styles.itemDetails}>
                 <Text style={styles.itemName}>{item.name || ""}</Text>
-                <Text style={styles.itemDescription}>
-                  {item.description || ""}
-                </Text>
+                <Text style={styles.itemDescription}>{item.description || ""}</Text>
               </View>
               <Text style={styles.itemQty}>{item.qty || 0}</Text>
               <Text style={styles.itemPrice}>
                 {data.symbol || "$"} {(item.price || 0).toFixed(2)}
               </Text>
               <Text style={styles.itemTotal}>
-                {data.symbol || "$"}{" "}
-                {((item.qty || 0) * (item.price || 0)).toFixed(2)}
+                {data.symbol || "$"} {((item.qty || 0) * (item.price || 0)).toFixed(2)}
               </Text>
             </View>
           ))}
         </View>
 
-        {/* Calculation Section */}
         <View style={styles.calculationSection}>
           <View style={styles.calculationContainer}>
             <View style={styles.calculationRow}>
@@ -643,7 +135,6 @@ const InvoicePDFTemplate = ({ data }) => {
           </View>
         </View>
 
-        {/* Payment Section */}
         <View style={styles.paymentSection}>
           <View style={styles.paymentDivider} />
           <View style={styles.paymentLeft}>
@@ -658,7 +149,6 @@ const InvoicePDFTemplate = ({ data }) => {
               );
             })}
           </View>
-
           <View style={styles.paymentRight}>
             <View style={styles.signatureContainer}>
               {data.signatureImage && (
@@ -667,33 +157,23 @@ const InvoicePDFTemplate = ({ data }) => {
             </View>
             {data.signatureImage && (
               <View style={styles.signatureTextContainer}>
-                <Text style={styles.signatureText}>
-                  {data.signatureText || ""}
-                </Text>
+                <Text style={styles.signatureText}>{data.signatureText || ""}</Text>
               </View>
             )}
           </View>
         </View>
 
-        {/* Terms Section */}
         {(data.termsSection?.title || data.termsSection?.text) && (
           <View style={styles.notesSection}>
-            <Text style={styles.notesTitle}>
-              {data.termsSection.title || ""}
-            </Text>
+            <Text style={styles.notesTitle}>{data.termsSection.title || ""}</Text>
             <Text style={styles.notesText}>{data.termsSection.text || ""}</Text>
           </View>
         )}
 
-        {/* Thank You Section */}
         {(data.thankyouSection?.title || data.thankyouSection?.text) && (
           <View style={styles.thankYouSection}>
-            <Text style={styles.thankYouTitle}>
-              {data.thankyouSection.title || ""}
-            </Text>
-            <Text style={styles.thankYouText}>
-              {data.thankyouSection.text || ""}
-            </Text>
+            <Text style={styles.thankYouTitle}>{data.thankyouSection.title || ""}</Text>
+            <Text style={styles.thankYouText}>{data.thankyouSection.text || ""}</Text>
           </View>
         )}
       </Page>

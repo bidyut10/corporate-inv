@@ -11,6 +11,8 @@ import { useInvoice } from "./editor/useInvoice";
 import Sidebar from "../ui/Sidebar";
 import Navbar from "../ui/Navbar";
 import { EditIcon } from "lucide-react";
+import { PdfThemeProvider } from "./pdf/PdfThemeProvider";
+import { normalizeTheme, getPdfTheme } from "./data/pdfThemes";
 
 const PdfInvoice = ({ onSelect }) => {
   const { invoiceData, logoImage, signatureImage } = useInvoice();
@@ -115,12 +117,15 @@ const handleMenuClose = () => {
             {/* PDF Preview */}
             <div className="w-full xl:w-[55%] py-6 bg-neutral-50/50 xl:overflow-y-auto text-xs">
               <div className="bg-white shadow-lg max-w-[595px] mx-auto">
-                <div className="w-[595px] h-[842px] bg-white text-black font-sans text-sm p-6">
-                  <div className="pb-3">
-                    <h1 className="text-xl font-normal uppercase text-neutral-800">
-                      Invoice {invoice.invoiceNumber}
-                    </h1>
-                  </div>
+                <PdfThemeProvider theme={normalizeTheme(invoiceData.theme)}>
+                  <div
+                    className={`w-[595px] min-h-[842px] font-sans text-sm p-6 ${getPdfTheme(normalizeTheme(invoiceData.theme)).page}`}
+                  >
+                    <div className="pb-3">
+                      <h1 className={`text-xl font-normal uppercase ${getPdfTheme(normalizeTheme(invoiceData.theme)).title}`}>
+                        Invoice {invoice.invoiceNumber}
+                      </h1>
+                    </div>
 
                   {/* Enhanced Invoice Header with Custom Fields */}
                   <InvoiceHeader
@@ -154,7 +159,8 @@ const handleMenuClose = () => {
                     title={invoiceData.thankyouSection.title}
                     text={invoiceData.thankyouSection.text}
                   />
-                </div>
+                  </div>
+                </PdfThemeProvider>
               </div>
             </div>
           </div>

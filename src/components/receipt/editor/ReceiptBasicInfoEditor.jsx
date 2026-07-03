@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import { Plus, Trash2, Edit3, Save, X } from "lucide-react";
 import Accordion from "../../common/Accordion";
 import Dropdown from "../../common/Dropdown";
+import DateField from "../../common/DateField";
+import { todayIso } from "../../common/dateUtils";
 import {
   primaryButtonClass,
   secondaryButtonClass,
@@ -21,6 +23,8 @@ const ReceiptBasicInfoEditor = ({
   buttonClass,
   renderCurrencyOption,
   renderSelectedCurrency,
+  renderThemeOption,
+  renderSelectedTheme,
   updateTheme,
   addCustomField,
   updateCustomField,
@@ -45,6 +49,12 @@ const ReceiptBasicInfoEditor = ({
   const handleSaveEdit = () => {
     setEditingField(null);
   };
+
+  const receiptDateError = !receiptData.receiptDate
+    ? "Receipt date is required"
+    : receiptData.receiptDate > todayIso()
+      ? "Receipt date cannot be in the future"
+      : "";
 
   return (
     <Accordion
@@ -79,11 +89,12 @@ const ReceiptBasicInfoEditor = ({
             </div>
             <div>
               <label className={labelClass}>Receipt Date</label>
-              <input
-                type="date"
+              <DateField
                 value={receiptData.receiptDate || ""}
-                onChange={(e) => updateBasicInfo("receiptDate", e.target.value)}
-                className={inputClass + " cursor-pointer"}
+                onChange={(value) => updateBasicInfo("receiptDate", value)}
+                max={todayIso()}
+                placeholder="Select receipt date"
+                error={receiptDateError}
               />
             </div>
             <div>
@@ -93,10 +104,8 @@ const ReceiptBasicInfoEditor = ({
                 onChange={(theme) => updateTheme(theme.value)}
                 options={themes}
                 placeholder="Select Theme"
-                renderOption={(theme) => theme.name}
-                renderSelected={(themeValue) =>
-                  themes.find((t) => t.value === themeValue)?.name || themeValue
-                }
+                renderOption={renderThemeOption}
+                renderSelected={renderSelectedTheme}
               />
             </div>
           </div>

@@ -164,7 +164,7 @@ export const currency = {
   ],
 };
 
-export const themes = [{ name: "Light", value: "light" }];
+export { themes } from "./pdfThemes";
 
 export const editorInputClass =
   "w-full text-xs px-3 py-2 border border-neutral-300 rounded-sm bg-white transition-colors focus:outline-none focus:border-neutral-900 focus:ring-1 focus:ring-neutral-900/10";

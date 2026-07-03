@@ -11,6 +11,8 @@ import ReceiptCalculationSection from "./ReceiptCalculationSection";
 import PaymentSection from "../invoice/pdf/PaymentSection";
 import NotesOrTermsSection from "../invoice/pdf/NotesOrTermsSection";
 import ThankyouSection from "../invoice/pdf/ThankyouSection";
+import { PdfThemeProvider } from "../invoice/pdf/PdfThemeProvider";
+import { normalizeTheme, getPdfTheme } from "../invoice/data/pdfThemes";
 
 const PdfReceipt = ({ onSelect }) => {
   const { receiptData, logoImage, signatureImage } = useReceipt();
@@ -46,7 +48,12 @@ const PdfReceipt = ({ onSelect }) => {
     },
   };
 
-  const product = { items: receiptData.items, tax: receiptData.tax, symbol: receiptData.symbol };
+  const product = {
+    items: receiptData.items,
+    tax: receiptData.tax,
+    symbol: receiptData.symbol,
+    receivedAmount: receiptData.receivedAmount,
+  };
   const payment = receiptData.payment.map((item) => ({ [item.label]: item.value }));
 
   return (
@@ -77,10 +84,15 @@ const PdfReceipt = ({ onSelect }) => {
             </div>
             <div className="w-full xl:w-[55%] py-6 bg-neutral-50/50 xl:overflow-y-auto text-xs">
               <div className="bg-white shadow-lg max-w-[595px] mx-auto">
-                <div className="w-[595px] h-[842px] bg-white text-black font-sans text-sm p-6">
-                  <div className="pb-3">
-                    <h1 className="text-xl font-normal uppercase text-neutral-800">Receipt {invoice.invoiceNumber}</h1>
-                  </div>
+                <PdfThemeProvider theme={normalizeTheme(receiptData.theme)}>
+                  <div
+                    className={`w-[595px] min-h-[842px] font-sans text-sm p-6 ${getPdfTheme(normalizeTheme(receiptData.theme)).page}`}
+                  >
+                    <div className="pb-3">
+                      <h1 className={`text-xl font-normal uppercase ${getPdfTheme(normalizeTheme(receiptData.theme)).title}`}>
+                        Receipt {invoice.invoiceNumber}
+                      </h1>
+                    </div>
                   <ReceiptHeader logo={logoImage || defaultLogo} receipt={{ receiptNumber: invoice.invoiceNumber, receiptDate: invoice.issueDate, currency: invoice.currency }} customFields={receiptData.customFields.basic} />
                   <BillingSection sender={{ ...details.sender, header: "Received By" }} receiver={{ ...details.receiver, header: "Received From" }} customFields={receiptData.customFields} />
                   <ItemsSection product={product} />
@@ -88,7 +100,8 @@ const PdfReceipt = ({ onSelect }) => {
                   <PaymentSection payment={payment} signature={signatureImage || defaultSignature} text={receiptData.signatureText} />
                   <NotesOrTermsSection title={receiptData.termsSection.title} text={receiptData.termsSection.text} />
                   <ThankyouSection title={receiptData.thankyouSection.title} text={receiptData.thankyouSection.text} />
-                </div>
+                  </div>
+                </PdfThemeProvider>
               </div>
             </div>
           </div>

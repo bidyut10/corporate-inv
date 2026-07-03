@@ -10,6 +10,11 @@ import ClientEditor from "../../invoice/editor/ClientEditor";
 import ItemsEditor from "../../invoice/editor/ItemsEditor";
 import { ArrowDownToLine, Loader, CheckCircle, XCircle } from "lucide-react";
 import { downloadReceiptPDF } from "../utils/index";
+import {
+  renderCurrencyOption,
+  renderSelectedCurrency,
+} from "../../common/currencyDisplay";
+import { isValidDateValue, todayIso } from "../../common/dateUtils";
 
 const ReceiptEditor = () => {
   const {
@@ -83,25 +88,21 @@ const ReceiptEditor = () => {
     }
   };
 
-  const renderCurrencyOption = (c) => (
-    <div className="flex items-center gap-2">
-      <span className="text-sm">{c.flag}</span>
-      <span className="text-xs">{c.code}</span>
-      <span className="text-neutral-500 text-xs">{c.symbol}</span>
+  const renderCurrencyOptionItem = (country) => renderCurrencyOption(country);
+
+  const renderSelectedCurrencyItem = (currencyCode) =>
+    renderSelectedCurrency(currencyCode, currency.countries);
+
+  const renderThemeOption = (theme) => (
+    <div className="flex items-center gap-2.5">
+      <span className={`h-3.5 w-3.5 shrink-0 rounded-full border ${theme.swatch}`} />
+      <span>{theme.name}</span>
     </div>
   );
 
-  const renderSelectedCurrency = (currencyCode) => {
-    const country = currency.countries.find((c) => c.code === currencyCode);
-    return country ? (
-      <div className="flex items-center gap-2">
-        <span className="text-sm">{country.flag}</span>
-        <span className="text-xs">{country.code}</span>
-        <span className="text-neutral-500 text-xs">{country.symbol}</span>
-      </div>
-    ) : (
-      currencyCode || ""
-    );
+  const renderSelectedTheme = (themeValue) => {
+    const theme = themes.find((t) => t.value === themeValue);
+    return theme ? renderThemeOption(theme) : themeValue;
   };
 
   const validateReceiptData = useCallback(() => {
@@ -117,6 +118,12 @@ const ReceiptEditor = () => {
 
     if (!receiptData.billedTo?.name?.trim()) {
       errors.push("Client name is required");
+    }
+
+    if (!isValidDateValue(receiptData.receiptDate)) {
+      errors.push("Receipt date is required");
+    } else if (receiptData.receiptDate > todayIso()) {
+      errors.push("Receipt date cannot be in the future");
     }
 
     if (!receiptData.items || receiptData.items.length === 0) {
@@ -217,8 +224,10 @@ const ReceiptEditor = () => {
         updateCurrency={updateCurrency}
         themes={themes}
         buttonClass={buttonClass}
-        renderCurrencyOption={renderCurrencyOption}
-        renderSelectedCurrency={renderSelectedCurrency}
+        renderCurrencyOption={renderCurrencyOptionItem}
+        renderSelectedCurrency={renderSelectedCurrencyItem}
+        renderThemeOption={renderThemeOption}
+        renderSelectedTheme={renderSelectedTheme}
         updateTheme={updateTheme}
         addCustomField={addCustomField}
         updateCustomField={updateCustomField}

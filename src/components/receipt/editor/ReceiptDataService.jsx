@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { currency, themes } from "../../invoice/data/data";
+import { normalizeTheme } from "../../invoice/data/pdfThemes";
 import { defaultReceiptData } from "../data";
 import { idbSet, idbGet, idbDelete } from "../../invoice/utils/imageStore";
 import { ReceiptContext } from "./receiptContext";
@@ -47,7 +48,7 @@ export const ReceiptProvider = ({ children }) => {
   };
 
   const updateTheme = (theme) => {
-    setReceiptData((prev) => ({ ...prev, theme }));
+    setReceiptData((prev) => ({ ...prev, theme: normalizeTheme(theme) }));
   };
 
   const updateBilledBy = (field, value) => {

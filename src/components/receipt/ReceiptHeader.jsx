@@ -1,6 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
+import { usePdfTheme } from "../invoice/pdf/usePdfTheme";
 
 const ReceiptHeader = ({ receipt, logo, customFields = [] }) => {
+  const t = usePdfTheme();
   const leftRef = useRef(null);
   const [leftHeight, setLeftHeight] = useState(0);
 
@@ -11,32 +13,28 @@ const ReceiptHeader = ({ receipt, logo, customFields = [] }) => {
   }, [receipt, customFields]);
 
   return (
-    <div className="relative flex justify-between items-start border-y border-dashed border-neutral-100 w-full">
-      <div className="absolute top-0 bottom-0 left-1/2 border-l border-dashed border-neutral-100"></div>
-      <div ref={leftRef} className="py-2 pr-4 w-[50%] text-xs">
+    <div className={`relative flex justify-between items-start border-y border-dashed ${t.border} w-full`}>
+      <div className={`absolute top-0 bottom-0 left-1/2 border-l border-dashed ${t.border}`}></div>
+      <div ref={leftRef} className={`py-2 pr-4 w-[50%] text-xs ${t.body}`}>
         <div className="flex justify-between items-center my-0.5">
-          <span className="text-black">Receipt Number</span>
+          <span className={t.label}>Receipt Number</span>
           <span className="ml-2">{receipt.receiptNumber}</span>
         </div>
         <div className="flex justify-between items-center my-0.5">
-          <span className="text-black">Receipt Date</span>
+          <span className={t.label}>Receipt Date</span>
           <span className="ml-2">{receipt.receiptDate}</span>
         </div>
         <div className="flex justify-between items-center my-0.5">
-          <span className="text-black">Currency</span>
+          <span className={t.label}>Currency</span>
           <span className="ml-2">{receipt.currency}</span>
         </div>
-
-        {customFields &&
-          customFields.length > 0 &&
-          customFields.map((field, index) => (
-            <div key={index} className="flex justify-between items-center my-0.5">
-              <span className="text-black">{field.label}</span>
-              <span className="ml-2">{field.value}</span>
-            </div>
-          ))}
+        {customFields?.map((field, index) => (
+          <div key={index} className="flex justify-between items-center my-0.5">
+            <span className={t.label}>{field.label}</span>
+            <span className="ml-2">{field.value}</span>
+          </div>
+        ))}
       </div>
-
       <div className="flex items-center justify-end w-[50%] py-2" style={{ height: leftHeight }}>
         <img className="max-h-full object-contain" src={logo} alt="logo" />
       </div>
@@ -45,5 +43,3 @@ const ReceiptHeader = ({ receipt, logo, customFields = [] }) => {
 };
 
 export default ReceiptHeader;
-
-
