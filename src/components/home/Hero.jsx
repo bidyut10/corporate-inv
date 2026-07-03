@@ -1,35 +1,38 @@
 import React from "react";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowUpRight, Eye, FileDown, Gift, MapPin, Shield } from "lucide-react";
 import InvoiceSkeleton from "./InvoiceSkeleton";
 import PhoneFrame from "./PhoneFrame";
 import Logo from "../ui/Logo";
-import editor from "../../assets/editor.png";
+import editorInv from "../../assets/editor-inv.png";
+import pdfInv from "../../assets/pdf-inv.png";
 import wallpaper3 from "../../assets/dith-homee.png";
-import wallpaper4 from "../../assets/wallpaper-4.png";
-import wallpaper5 from "../../assets/wallpaper-5.png";
-import wallpaper6 from "../../assets/wallpaper-6.png";
 
 const btnBlack =
   "inline-flex items-center gap-2 rounded-lg bg-neutral-900 px-4 py-2.5 text-sm text-white transition-colors hover:bg-neutral-800 cursor-pointer";
 
 const LINKS = {
   github: "https://github.com/bidyut10",
+  portfolio: "https://bidyut-kundu.vercel.app",
   twitter: "https://x.com/BidyutKundu12",
   coffee: "https://buymeacoffee.com/bidyutkundu",
+  bugReport:
+    "mailto:bidyut.kundu.dev@gmail.com?subject=Paperdoc%20Bug%20Report&body=Please%20describe%20the%20bug%20and%20how%20to%20reproduce%20it.",
 };
 
-const OTHER_PROJECTS = [
-  {
-    name: "OpenSource UI",
-    desc: "Open source UI library",
-    url: "https://opensourceui.in",
-  },
-  {
-    name: "NextIcons",
-    desc: "SVG icons & editor",
-    url: "https://nexticons.in",
-  },
+const FOOTER_TOOLS = [
+  { name: "Opensource UI", desc: "Open source UI library", url: "https://opensourceui.in" },
+  { name: "NextIcons", desc: "SVG icons & editor", url: "https://nexticons.in" },
 ];
+
+const FOOTER_LINKS = [
+  { label: "GitHub", url: LINKS.github },
+  { label: "Twitter", url: LINKS.twitter },
+  { label: "Buy me a coffee", url: LINKS.coffee },
+  { label: "Report a bug", url: LINKS.bugReport },
+];
+
+const footLinkClass =
+  "group inline-flex items-center gap-1.5 text-sm text-neutral-600 transition-colors hover:text-neutral-900";
 
 const HOW_IT_WORKS = [
   "Start by filling in your business name, your client's name, and what you charged. The form stays simple — no clutter, no confusion.",
@@ -49,94 +52,30 @@ const WALLPAPER_MASK = {
   maskRepeat: "no-repeat",
 };
 
-function BgCard({ image, className, overlayClass, children }) {
-  return (
-    <article className={`relative overflow-hidden ${className}`}>
-      <img src={image} alt="" className="absolute inset-0 h-full w-full object-cover" />
-      <div className={`absolute inset-0 ${overlayClass}`} />
-      <div className="relative flex h-full min-h-[inherit] flex-col justify-end p-4 md:p-5">
-        {children}
-      </div>
-    </article>
-  );
-}
+const SHOWCASE = [
+  {
+    label: "Editor",
+    title: "See it as you type",
+    desc: "Fill in details and watch your invoice update live.",
+    image: editorInv,
+    alt: "Paperdoc invoice editor",
+    extraPad: true,
+  },
+  {
+    label: "PDF",
+    title: "Download in one click",
+    desc: "Export a clean, print-ready PDF when you are done.",
+    image: pdfInv,
+    alt: "Paperdoc invoice PDF preview",
+  },
+];
 
-function PreviewCard() {
-  return (
-    <BgCard
-      image={editor}
-      className="col-span-2 min-h-[200px] rounded-[1.75rem] md:col-span-4 md:row-span-2 md:min-h-[240px] md:rounded-[2rem]"
-      overlayClass="bg-gradient-to-t from-white via-white/75 to-white/10"
-    >
-      <p className="text-sm font-medium text-neutral-900">Live preview</p>
-      <p className="mt-0.5 text-xs text-neutral-600">Updates as you type</p>
-    </BgCard>
-  );
-}
-
-function PrivateCard() {
-  return (
-    <BgCard
-      image={wallpaper6}
-      className="col-span-2 min-h-[140px] rounded-[1.75rem] rounded-tr-[3.5rem] md:col-span-2 md:row-span-2 md:min-h-0 md:rounded-tr-[4.5rem]"
-      overlayClass="bg-neutral-950/80"
-    >
-      <p className="text-sm font-medium text-white">Private</p>
-      <p className="mt-0.5 text-xs text-neutral-400">Stays on your device</p>
-    </BgCard>
-  );
-}
-
-function LayoutsCard() {
-  return (
-    <BgCard
-      image={wallpaper4}
-      className="col-span-1 min-h-[130px] rounded-2xl rounded-bl-[2.5rem] md:col-span-2 md:rounded-bl-[3rem]"
-      overlayClass="bg-gradient-to-t from-white via-white/80 to-transparent"
-    >
-      <p className="text-sm font-medium text-neutral-900">Pro layouts</p>
-      <p className="mt-0.5 text-xs text-neutral-600">Ready to send</p>
-    </BgCard>
-  );
-}
-
-function PdfCard() {
-  return (
-    <article className="col-span-1 mx-auto flex aspect-square w-full max-w-[140px] flex-col items-center justify-center self-center rounded-full bg-neutral-950 p-4 md:col-span-2 md:max-w-none md:min-h-0">
-      <span className="text-2xl font-semibold tracking-tight text-white md:text-3xl">PDF</span>
-      <p className="mt-1 text-[11px] text-neutral-400">One click</p>
-    </article>
-  );
-}
-
-function FreeCard() {
-  return (
-    <article className="relative col-span-2 min-h-[100px] overflow-hidden rounded-[2rem] rounded-tl-sm border-2 border-dashed border-neutral-300 md:col-span-2 md:min-h-[130px]">
-      <img
-        src={wallpaper5}
-        alt=""
-        className="absolute inset-0 h-full w-full object-cover"
-      />
-      <div className="absolute inset-0 bg-white/88" />
-      <div className="relative flex h-full min-h-[inherit] flex-col items-center justify-center p-4">
-        <p className="text-2xl font-semibold text-neutral-900">Free</p>
-        <p className="mt-0.5 text-[11px] text-neutral-500">No subscription</p>
-      </div>
-    </article>
-  );
-}
-
-function SignupCard() {
-  return (
-    <article className="col-span-2 flex min-h-[52px] items-center justify-center rounded-full bg-neutral-100 px-6 py-3.5 md:col-span-6">
-      <p className="text-sm text-neutral-800">
-        <span className="font-medium text-neutral-900">No sign-up</span>
-        <span className="mx-2 text-neutral-300">·</span>
-        <span className="text-neutral-600">Open and start</span>
-      </p>
-    </article>
-  );
-}
+const FEATURES = [
+  { icon: Eye, label: "Live preview" },
+  { icon: FileDown, label: "PDF export" },
+  { icon: Shield, label: "Private" },
+  { icon: Gift, label: "Free to use" },
+];
 
 const LandingPage = ({ onNavigate }) => {
   return (
@@ -209,15 +148,49 @@ const LandingPage = ({ onNavigate }) => {
           </div>
         </section>
 
-        <section>
-          <div className="mx-auto max-w-4xl px-6 py-16 md:py-20">
-            <div className="mt-8 grid grid-cols-2 items-stretch gap-3 md:grid-cols-6 md:auto-rows-[minmax(130px,auto)]">
-              <PreviewCard />
-              <PrivateCard />
-              <LayoutsCard />
-              <PdfCard />
-              <FreeCard />
-              <SignupCard />
+        <section className="border-t border-neutral-100 bg-white">
+          <div className="mx-auto max-w-2xl px-6 py-20 md:py-28">
+            <h2 className="text-2xl text-neutral-900 md:text-3xl">
+              Everything you need. Nothing you don&apos;t.
+            </h2>
+            <p className="mt-3 text-xs text-neutral-500">Free to use · No account needed</p>
+            <p className="mt-5 max-w-lg text-base leading-relaxed text-neutral-600">
+              Fill in your invoice, preview it live, and download a PDF — all in one flow.
+            </p>
+
+            <div className="mt-14 grid gap-12 md:mt-16 md:grid-cols-2 md:gap-8">
+              {SHOWCASE.map((item) => (
+                <div key={item.label} className="flex flex-col">
+                  <div>
+                    <p className="text-xs font-medium uppercase tracking-wider text-neutral-400">
+                      {item.label}
+                    </p>
+                    <h3 className="mt-1 text-lg text-neutral-900 md:text-xl">{item.title}</h3>
+                    <p className="mt-1.5 text-sm leading-relaxed text-neutral-500">{item.desc}</p>
+                  </div>
+
+                  <div className="mt-6 flex min-h-[300px] flex-1 flex-col overflow-hidden rounded-2xl border border-neutral-200 bg-white md:min-h-[340px]">
+                    <div className="flex flex-1 flex-col justify-end px-4 pt-5">
+                      <img src={item.image} alt={item.alt} className="block w-full" />
+                      {item.extraPad && (
+                        <div
+                          className="min-h-[72px] shrink-0 bg-white md:min-h-[88px]"
+                          aria-hidden="true"
+                        />
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-16 grid grid-cols-2 gap-x-4 gap-y-10 border-t border-neutral-200 pt-12 md:mt-20 md:grid-cols-4 md:gap-y-0">
+              {FEATURES.map(({ icon: Icon, label }) => (
+                <div key={label} className="flex flex-col items-center text-center">
+                  <Icon className="h-8 w-8 text-neutral-800" strokeWidth={1.25} />
+                  <p className="mt-3 text-sm text-neutral-600">{label}</p>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -258,7 +231,7 @@ const LandingPage = ({ onNavigate }) => {
               <p className="text-2xl leading-snug text-neutral-800">
                 More free open source tools from the same builder —{" "}
                 <a
-                  href={OTHER_PROJECTS[0].url}
+                  href={FOOTER_TOOLS[0].url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition-colors hover:decoration-neutral-900"
@@ -267,7 +240,7 @@ const LandingPage = ({ onNavigate }) => {
                 </a>
                 , a UI library, and{" "}
                 <a
-                  href={OTHER_PROJECTS[1].url}
+                  href={FOOTER_TOOLS[1].url}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="text-neutral-900 underline decoration-neutral-300 underline-offset-4 transition-colors hover:decoration-neutral-900"
@@ -280,43 +253,77 @@ const LandingPage = ({ onNavigate }) => {
           </div>
         </section>
 
-        <footer>
-          <div className="mx-auto max-w-2xl px-6 py-10 md:py-12">
-            <Logo className="h-5 w-auto" />
-            <p className="mt-4 text-sm leading-relaxed text-neutral-500">
-              Made by{" "}
-              <span className="text-neutral-800">Bidyut Kundu</span>
-              <span className="mx-2 text-neutral-300">·</span>
+        <footer className="border-t border-neutral-100 bg-white">
+          <div className="mx-auto max-w-2xl px-6 py-12 md:py-16">
+            <Logo className="h-12 w-auto" />
+
+            <div className="mt-8">
+              <p className="text-xs text-neutral-400">Made by</p>
               <a
-                href={LINKS.github}
+                href={LINKS.portfolio}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-neutral-600 underline-offset-4 transition-colors hover:text-neutral-900 hover:underline"
+                className="group mt-1 inline-flex items-center gap-1.5 text-sm text-neutral-900 transition-colors hover:text-neutral-600"
               >
-                GitHub
+                Bidyut Kundu
+                <ArrowUpRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
               </a>
-              <span className="mx-2 text-neutral-300">·</span>
-              <a
-                href={LINKS.twitter}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-600 underline-offset-4 transition-colors hover:text-neutral-900 hover:underline"
-              >
-                Twitter
-              </a>
-              <span className="mx-2 text-neutral-300">·</span>
-              <a
-                href={LINKS.coffee}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-neutral-600 underline-offset-4 transition-colors hover:text-neutral-900 hover:underline"
-              >
-                Buy me a coffee
-              </a>
-            </p>
-            <p className="mt-4 text-xs text-neutral-400">
-              © {new Date().getFullYear()} Paperdoc
-            </p>
+              <p className="mt-2 flex items-center gap-1.5 text-xs text-neutral-400">
+                <MapPin className="h-3.5 w-3.5 shrink-0" strokeWidth={1.5} />
+                India
+              </p>
+            </div>
+
+            <div className="mt-10 grid gap-10 sm:grid-cols-2">
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wider text-neutral-400">
+                  More free tools
+                </p>
+                <ul className="mt-4 space-y-4">
+                  {FOOTER_TOOLS.map((tool) => (
+                    <li key={tool.url}>
+                      <a
+                        href={tool.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className={footLinkClass}
+                      >
+                        {tool.name}
+                        <ArrowUpRight className="h-3.5 w-3.5 opacity-40 transition-opacity group-hover:opacity-100" />
+                      </a>
+                      <p className="mt-0.5 text-xs text-neutral-400">{tool.desc}</p>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <div>
+                <p className="text-xs font-medium uppercase tracking-wider text-neutral-400">
+                  Connect
+                </p>
+                <ul className="mt-4 space-y-3">
+                  {FOOTER_LINKS.map((link) => (
+                    <li key={link.label}>
+                      <a
+                        href={link.url}
+                        target={link.url.startsWith("mailto:") ? undefined : "_blank"}
+                        rel={link.url.startsWith("mailto:") ? undefined : "noopener noreferrer"}
+                        className={footLinkClass}
+                      >
+                        {link.label}
+                        <ArrowUpRight className="h-3.5 w-3.5 opacity-40 transition-opacity group-hover:opacity-100" />
+                      </a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+
+            <div className="mt-12 border-t border-neutral-100 pt-8">
+              <p className="text-xs leading-relaxed text-neutral-400">
+                © {new Date().getFullYear()} Paperdoc · Open source & free to use
+              </p>
+            </div>
           </div>
         </footer>
       </div>

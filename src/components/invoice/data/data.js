@@ -7,12 +7,12 @@ export const defaultInvoiceData = {
   currency: "USD",
   theme: "light",
   billedBy: {
-    name: "Corporate AI Ltd",
+    name: "Opensource UI",
     contact: "bidyut.kundu.dev@gmail.com",
     address: "123 Main St, Anytown, USA",
   },
   billedTo: {
-    name: "John Doe",
+    name: "Bidyut Kundu",
     contact: "8617698611",
     address: "456 Second St, Anytown, USA",
   },
