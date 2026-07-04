@@ -1,17 +1,14 @@
-import React, { useState } from "react";
+import React, { Suspense, lazy, useState } from "react";
 import { useNavigate, Routes, Route } from "react-router-dom";
-import { InvoiceProvider } from "./components/invoice/editor/InvoiceDataService";
-import PdfInvoice from "./components/invoice/PdfInvoice";
-import { ReceiptProvider } from "./components/receipt";
-import { default as PdfReceipt } from "./components/receipt/Receipt";
+import { Loader } from "lucide-react";
 import Hero from "./components/home/Hero";
 import "./App.css";
+
+const DocumentsPage = lazy(() => import("./pages/DocumentsPage"));
 
 function App() {
   const navigate = useNavigate();
   const [activeView, setActiveView] = useState("invoice");
-
-  const handleSelect = (view) => setActiveView(view);
 
   const handleNavigate = () => {
     navigate("/documents");
@@ -19,22 +16,20 @@ function App() {
 
   return (
     <Routes>
-      {/* Landing Page */}
       <Route path="/" element={<Hero onNavigate={handleNavigate} />} />
 
-      {/* Documents Page */}
       <Route
         path="/documents"
         element={
-          activeView === "invoice" ? (
-            <InvoiceProvider>
-              <PdfInvoice onSelect={handleSelect} />
-            </InvoiceProvider>
-          ) : (
-            <ReceiptProvider>
-              <PdfReceipt onSelect={handleSelect} />
-            </ReceiptProvider>
-          )
+          <Suspense
+            fallback={
+              <div className="flex min-h-screen items-center justify-center bg-neutral-50">
+                <Loader size={28} className="animate-spin text-neutral-400" />
+              </div>
+            }
+          >
+            <DocumentsPage activeView={activeView} onSelect={setActiveView} />
+          </Suspense>
         }
       />
     </Routes>
